@@ -1,0 +1,229 @@
+{
+  "itinerari": [
+    {
+      "id": "crepuscolo_byroniano",
+      "nome": "Crepuscolo Byroniano",
+      "sottotitolo": "Roma: Città dell'Anima sulle tracce di Lord Byron",
+      "personaggio": {
+        "nome": "George Gordon, Lord Byron",
+        "anni": "1788-1824",
+        "professione": "Poeta",
+        "nazionalita": "Britannica",
+        "biografia_breve": "Figura iconica del Romanticismo europeo. Aristocratico, ribelle e in esilio volontario, soggiornò a Roma nella primavera del 1817. L'impatto con le rovine romane lo ispirò a completare il suo capolavoro, consacrando Roma come 'Città dell'anima' e simbolo del sentimento malinconico.",
+        "immagine": "assets/personaggi/byron.jpg",
+        "opere_correlate": [
+          "Childe Harold's Pilgrimage (Canto IV)",
+          "Manfred",
+          "Lettere e Diari (1817)"
+        ]
+      },
+      "tema": "Letteratura - Viaggio Romantico",
+      "categoria": "Arte, Storia e Letteratura",
+      "durata_totale_ore": 12,
+      "difficolta": "facile",
+      "immagine_copertina": "http://googleusercontent.com/image_collection/image_retrieval/1012670391132669225_0",
+      "distanza_totale_km": 2.5,
+      "periodo_consigliato": "Primavera/Autunno (per la luce crepuscolare)",
+      "stagione_migliore": ["aprile", "maggio", "settembre", "ottobre"],
+      "descrizione": "Un pellegrinaggio emotivo diviso in quattro momenti della giornata. Dalla nostalgia mattutina al sublime del crepuscolo, questo itinerario ripercorre i passi dell'eroe byroniano alla ricerca dell'infinito tra le rovine della Città Eterna.",
+      "note_logistiche": "L'itinerario non è continuo ma segue il variare della luce durante la giornata. Prevede una pausa tra la mattina e il tardo pomeriggio. Il percorso a piedi effettivo è breve, il focus è sulla permanenza emotiva nei luoghi.",
+      "accessibilita": "Completamente accessibile a piedi o con mezzi pubblici nel centro storico.",
+      "costo_stimato": "Gratuito (esclusa l'eventuale consumazione al Caffè Greco)",
+      "tappe": [
+        {
+          "numero": 1,
+          "poi_id": "piazza_spagna_byron",
+          "orario_consigliato": "08:30",
+          "momento_giornata": "mattina presto",
+          "durata_visita_min": 45,
+          "coordinate": [41.9057, 12.4823],
+          "nome": "Piazza di Spagna e Residenza",
+          "descrizione_breve": "L'esilio dell'eroe romantico. Il risveglio nel 'ghetto degli inglesi'.",
+          "indicazioni_arrivo": "Metro A, fermata Spagna. Posizionarsi ai piedi della scalinata di Trinità dei Monti.",
+          "esperienza_culturale": {
+            "letteratura": {
+              "citazione": "Sono innamorato di Roma... è la città dell'anima.",
+              "opera": "Lettere a Thomas Moore",
+              "anno": 1817,
+              "contesto": "Byron esprime il suo primo impatto folgorante con la città appena giunto nel suo appartamento al civico 66."
+            },
+            "atmosfera": {
+              "momento": "mattina presto",
+              "luce": "fresca e azzurrina, prime luci sui tetti",
+              "suoni_ambiente": [
+                "rumore dell'acqua della Barcaccia",
+                "passi sui sanpietrini",
+                "risveglio della città"
+              ],
+              "temperatura_stimata": "14-16°C",
+              "affollamento": "basso",
+              "emozione_target": "Nostalgia (Solitude)"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Barocco",
+              "luogo_chiave": "Palazzo al civico 66 e Keats-Shelley House (civico 26)",
+              "descrizione": "Il salotto a cielo aperto dei viaggiatori del Grand Tour."
+            }
+          },
+          "storia": "Nella primavera del 1817 Byron prese in affitto un appartamento in questa piazza, all'epoca centro nevralgico della vita degli stranieri a Roma.",
+          "connessione_byron": "Rappresenta il concetto di 'Zehnsucht': lo struggimento romantico e la ricerca di un rifugio per l'anima in fuga dalla società.",
+          "metadata": {
+            "accessibilita": "Piazza pubblica, sempre aperta",
+            "orari_standard": "24/7 (Keats-Shelley House: 10:00-13:00 / 14:00-18:00)"
+          }
+        },
+        {
+          "numero": 2,
+          "poi_id": "caffe_greco",
+          "orario_consigliato": "16:00",
+          "momento_giornata": "metà pomeriggio",
+          "durata_visita_min": 60,
+          "coordinate": [41.9054, 12.4815],
+          "nome": "Antico Caffè Greco",
+          "descrizione_breve": "Il salotto cosmopolita dove le idee del Romanticismo europeo si incontravano.",
+          "indicazioni_arrivo": "Da Piazza di Spagna, imboccare Via dei Condotti. Il locale si trova al civico 86.",
+          "tempo_spostamento_da_tappa_precedente": {
+            "a_piedi": "3 min",
+            "distanza_km": 0.2
+          },
+          "esperienza_culturale": {
+            "letteratura": {
+              "citazione": "I grandi poeti e gli artisti siedono in queste stanze fumose, dove l'arte non ha nazione.",
+              "contesto": "Il fermento intellettuale dei ritrovi bohémien dell'Ottocento."
+            },
+            "atmosfera": {
+              "momento": "pomeriggio",
+              "luce": "soffusa, calda, interni vellutati",
+              "suoni_ambiente": [
+                "tintinnio di tazzine",
+                "brusio in diverse lingue",
+                "scricchiolio del legno"
+              ],
+              "affollamento": "alto",
+              "emozione_target": "Genio (Intellect)"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Interni storici ottocenteschi",
+              "descrizione": "Sale labirintiche adorne di oltre 300 opere d'arte, specchi e stucchi."
+            }
+          },
+          "storia": "Fondato nel 1760, è il più antico caffè di Roma. Fu crocevia di intellettuali da Goethe a Schopenhauer, da Keats a Byron.",
+          "connessione_byron": "Qui Byron recitava il suo ruolo di dandy tormentato, mescolandosi con la comunità artistica internazionale.",
+          "metadata": {
+            "accessibilita": "Locale commerciale aperti al pubblico",
+            "servizi": ["Servizio al tavolo", "Galleria d'arte interna"]
+          }
+        },
+        {
+          "numero": 3,
+          "poi_id": "foro_romano",
+          "orario_consigliato": "18:00",
+          "momento_giornata": "tardo pomeriggio (Golden Hour)",
+          "durata_visita_min": 60,
+          "coordinate": [41.8925, 12.4853],
+          "nome": "Foro Romano",
+          "descrizione_breve": "L'estetica del Sublime: la natura che riconquista la gloria passata.",
+          "indicazioni_arrivo": "Passeggiata lungo Via del Corso, Piazza Venezia, fino a Via dei Fori Imperiali.",
+          "tempo_spostamento_da_tappa_precedente": {
+            "a_piedi": "20 min",
+            "distanza_km": 1.5
+          },
+          "esperienza_culturale": {
+            "letteratura": {
+              "citazione": "Oh Roma! Patria mia! Città dell'anima! / Gli orfani del cuore si volgano a te, / Genitrice di imperi defunti...",
+              "autore": "Lord Byron",
+              "opera": "Childe Harold's Pilgrimage (Canto IV, Stanza 78)",
+              "anno": 1818,
+              "contesto": "La meditazione sulla caducità della grandezza umana davanti alle rovine."
+            },
+            "atmosfera": {
+              "momento": "tardo pomeriggio (ora d'oro)",
+              "luce": "dorata, ombre lunghe sui marmi",
+              "suoni_ambiente": [
+                "vento tra le rovine",
+                "lontananza del traffico moderno"
+              ],
+              "temperatura_stimata": "18-20°C",
+              "consiglio_fotografico": "Catturare i controluce delle colonne dei templi. Enfatizzare il verde della vegetazione sulle pietre antiche.",
+              "emozione_target": "Malinconia (Decadence)"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Antichità Romana in rovina",
+              "descrizione": "Il cuore politico e religioso dell'Impero Romano, all'epoca di Byron noto in parte come 'Campo Vaccino'."
+            }
+          },
+          "storia": "Agli inizi dell'Ottocento, l'area non era ancora stata del tutto scavata. Colonne e archi emergevano dal terreno ricoperti di vegetazione, pascolati dalle mucche.",
+          "connessione_byron": "La quintessenza del romanticismo: l'esule che si confronta con il Sublime, trovando conforto nel fatto che anche i più grandi imperi crollano.",
+          "metadata": {
+            "accessibilita": "Vista panoramica gratuita da Via dei Fori Imperiali",
+            "orari_standard": "Passeggiata su strada sempre aperta"
+          }
+        },
+        {
+          "numero": 4,
+          "poi_id": "colosseo_crepuscolo",
+          "orario_consigliato": "19:30",
+          "momento_giornata": "crepuscolo",
+          "durata_visita_min": 60,
+          "coordinate": [41.8902, 12.4922],
+          "nome": "Il Colosseo",
+          "descrizione_breve": "Il trionfo dell'emozione: l'anfiteatro avvolto dalle ombre della sera.",
+          "indicazioni_arrivo": "Proseguire dritto lungo Via dei Fori Imperiali fino alla piazza del Colosseo.",
+          "tempo_spostamento_da_tappa_precedente": {
+            "a_piedi": "10 min",
+            "distanza_km": 0.8
+          },
+          "esperienza_culturale": {
+            "letteratura": {
+              "citazione": "Ma quando sorge la luna, e la luce / Porge a queste mura una magia gentile... / Lasciando quel che in rovina è più bello.",
+              "autore": "Lord Byron",
+              "opera": "Manfred (Atto III, Scena 4)",
+              "anno": 1817,
+              "contesto": "Il protagonista Manfred ricorda la sua visita solitaria e mistica al Colosseo."
+            },
+            "atmosfera": {
+              "momento": "crepuscolo / prima notte",
+              "luce": "viola scuro, rosso morente, blu notte profondo",
+              "suoni_ambiente": [
+                "silenzio monumentale",
+                "uccelli notturni"
+              ],
+              "temperatura_stimata": "15-17°C",
+              "consiglio_fotografico": "Cavalletto obbligatorio. Fotografare la mole scura dell'anfiteatro con il cielo crepuscolare violaceo sullo sfondo.",
+              "emozione_target": "Estasi (Infinity)"
+            },
+            "arte_visiva": {
+              "stile_architettonico": "Architettura Imperiale Romana",
+              "descrizione": "Il più grande anfiteatro del mondo. Nel Romanticismo, le sue arcate sbrecciate erano considerate l'apice dell'estetica gotica e rovinista."
+            }
+          },
+          "storia": "Simbolo della grandezza e brutalità di Roma. Fino alla fine dell'Ottocento, l'interno era una foresta di piante rare cresciute spontaneamente tra i ruderi.",
+          "connessione_byron": "Il culmine del viaggio. Byron detestava la razionalità solare: solo nell'oscurità il poeta si sente unito all'infinito e al mistero dell'esistenza.",
+          "metadata": {
+            "accessibilita": "Piazza esterna sempre aperta e gratuita",
+            "orari_standard": "Illuminazione serale attiva"
+          }
+        }
+      ],
+      "mappa_percorso": {
+        "colore_percorso": "#4a235a",
+        "stile_linea": "solid",
+        "nota_visiva": "Il colore viola/antracite richiama l'atmosfera crepuscolare"
+      },
+      "consigli_pratici": [
+        "Dividere l'itinerario: fare la Tappa 1 e 2 al mattino/pomeriggio, e la Tappa 3 e 4 verso sera.",
+        "Portare la macchina fotografica per catturare i cali di luce.",
+        "Leggere i versi del Canto IV del Childe Harold prima di arrivare ai Fori.",
+        "Scarpe comode per i sanpietrini di Via dei Fori Imperiali."
+      ],
+      "migliore_periodo_anno": "Aprile-Maggio (lo stesso periodo in cui Byron fu a Roma) o inizio autunno.",
+      "sconsigliato": ["Piena estate (si perde l'effetto nebbioso/romantico delle luci)", "Ore centrali della giornata (rovina l'atmosfera byroniana)"],
+      "cosa_portare": [
+        "Un taccuino e una penna",
+        "Smartphone o reflex per foto al crepuscolo",
+        "Abbigliamento a strati per lo sbalzo termico serale",
+        "Il poema 'Childe Harold's Pilgrimage' o 'Manfred'"
+      ]
+    }
+  ]
+}
