@@ -628,26 +628,67 @@
         function getEmbeddedItinerari() {
             // Versione semplificata embedded come fallback
             return [{
-                id: "respighi_fontane",
-                nome: "Le Fontane di Roma",
-                sottotitolo: "Poema sinfonico di Ottorino Respighi",
-                personaggio: { nome: "Ottorino Respighi", anni: "1879-1936" },
-                descrizione: "Segui le note del poema sinfonico attraverso le fontane di Roma.",
-                durata_totale_ore: 8,
-                distanza_totale_km: 6.5,
-                tappe: [
-                    {
-                        numero: 1,
-                        nome: "Villa Giulia",
-                        coordinate: [41.9167, 12.4792],
-                        orario_consigliato: "06:00",
-                        momento_giornata: "alba",
-                        durata_visita_min: 45,
-                        descrizione_breve: "Fontana rinascimentale all'alba"
-                    }
-                ]
-            }];
+  "itinerari": [
+    {
+      "id": "crepuscolo_byroniano",
+      "nome": "Crepuscolo Byroniano",
+      "sottotitolo": "Roma: Città dell'Anima sulle tracce di Lord Byron",
+      "personaggio": {
+        "nome": "Lord Byron",
+        "anni": "1788-1824"
+      },
+      "descrizione": "Un pellegrinaggio emotivo diviso in quattro momenti. Dalla nostalgia mattutina al sublime del crepuscolo, questo itinerario ripercorre i passi dell'eroe byroniano alla ricerca dell'infinito tra le rovine della Città Eterna.",
+      "durata_totale_ore": 5,
+      "distanza_totale_km": 2.5,
+      "tappe": [
+        {
+          "numero": 1,
+          "nome": "Piazza di Spagna e Residenza",
+          "coordinate": [41.9057, 12.4823],
+          "orario_consigliato": "08:30",
+          "momento_giornata": "mattina presto",
+          "durata_visita_min": 45,
+          "emozione_target": "Nostalgia",
+          "descrizione_breve": "L'esilio dell'eroe romantico. Il risveglio nel 'ghetto degli inglesi' nella luce fresca del mattino.",
+          "descrizione": "Nella primavera del 1817 Byron prese in affitto un appartamento al civico 66 di questa piazza. Rappresenta lo 'Zehnsucht': lo struggimento romantico e la ricerca di un rifugio per l'anima in fuga."
+        },
+        {
+          "numero": 2,
+          "nome": "Antico Caffè Greco",
+          "coordinate": [41.9054, 12.4815],
+          "orario_consigliato": "16:00",
+          "momento_giornata": "metà pomeriggio",
+          "durata_visita_min": 60,
+          "emozione_target": "Genio",
+          "descrizione_breve": "Il salotto cosmopolita dove le idee del Romanticismo europeo si incontravano.",
+          "descrizione": "Fondato nel 1760, fu crocevia di intellettuali e artisti. Qui Byron recitava il suo ruolo di dandy tormentato, immerso nell'atmosfera bohémien, vellutata e cosmopolita dell'Ottocento."
+        },
+        {
+          "numero": 3,
+          "nome": "Foro Romano",
+          "coordinate": [41.8925, 12.4853],
+          "orario_consigliato": "18:00",
+          "momento_giornata": "tardo pomeriggio (Golden Hour)",
+          "durata_visita_min": 60,
+          "emozione_target": "Malinconia",
+          "descrizione_breve": "L'estetica del Sublime: la natura che riconquista la gloria passata.",
+          "descrizione": "Avvolte nella luce dorata del tramonto incipiente, le rovine ispirarono a Byron profonde riflessioni sulla caducità della grandezza umana. È il trionfo del sentimento sulla gloria terrena."
+        },
+        {
+          "numero": 4,
+          "nome": "Il Colosseo",
+          "coordinate": [41.8902, 12.4922],
+          "orario_consigliato": "19:30",
+          "momento_giornata": "crepuscolo",
+          "durata_visita_min": 60,
+          "emozione_target": "Estasi",
+          "descrizione_breve": "Il trionfo dell'emozione: l'anfiteatro avvolto dalle ombre della sera.",
+          "descrizione": "Il culmine del viaggio. Byron detestava la razionalità solare: è nell'oscurità del crepuscolo e nel silenzio monumentale che il poeta si sente unito all'infinito e al mistero dell'esistenza."
         }
+      ]
+    }
+  ]
+}
         
         // ========================================
         // RENDERING HOME
