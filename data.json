@@ -34,7 +34,7 @@
           "numero": 1,
           "poi_id": "piazza_spagna_byron",
           "orario_consigliato": "08:30",
-          "momento_giornata": "mattina presto",
+          "momento_giornata": "mattino",
           "durata_visita_min": 45,
           "coordinate": [41.9057, 12.4823],
           "nome": "Piazza di Spagna e Residenza",
@@ -48,7 +48,7 @@
               "contesto": "Byron esprime il suo primo impatto folgorante con la città appena giunto nel suo appartamento al civico 66."
             },
             "atmosfera": {
-              "momento": "mattina presto",
+              "momento": "mattino",
               "luce": "fresca e azzurrina, prime luci sui tetti",
               "suoni_ambiente": [
                 "rumore dell'acqua della Barcaccia",
@@ -76,7 +76,7 @@
           "numero": 2,
           "poi_id": "caffe_greco",
           "orario_consigliato": "16:00",
-          "momento_giornata": "metà pomeriggio",
+          "momento_giornata": "pomeriggio",
           "durata_visita_min": 60,
           "coordinate": [41.9054, 12.4815],
           "nome": "Antico Caffè Greco",
@@ -118,7 +118,7 @@
           "numero": 3,
           "poi_id": "foro_romano",
           "orario_consigliato": "18:00",
-          "momento_giornata": "tardo pomeriggio (Golden Hour)",
+          "momento_giornata": "sera",
           "durata_visita_min": 60,
           "coordinate": [41.8925, 12.4853],
           "nome": "Foro Romano",
@@ -137,7 +137,7 @@
               "contesto": "La meditazione sulla caducità della grandezza umana davanti alle rovine."
             },
             "atmosfera": {
-              "momento": "tardo pomeriggio (ora d'oro)",
+              "momento": "sera",
               "luce": "dorata, ombre lunghe sui marmi",
               "suoni_ambiente": [
                 "vento tra le rovine",
