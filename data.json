@@ -168,17 +168,18 @@
           "coordinate": [41.8902, 12.4922],
           "nome": "Il Colosseo",
           "descrizione_breve": "Il culmine del viaggio. Byron detestava visitare l'Anfiteatro Flavio di giorno, circondato dai turisti e dal clamore. Lo amava al crepuscolo o al chiaro di luna, immerso nel silenzio. Raggiungere il Colosseo al calar del sole significa abbracciare l'essenza dell'epistemologia romantica: l'oscurità cancella i calcoli razionali e lascia spazio solo all'intuizione e all'emozione pura. È qui, nella solitudine davanti al gigante di pietra, che l'uomo si ricongiunge con il mistero dell'esistenza.",
-          "musica": {
-              "movimento": "Sinfonia n. 7, Allegretto",
-              "descrizione_musicale": "Il ritmo di Beethoven evoca il Sublime.",
-              "url_audio": "https://dn721601.ca.archive.org/0/items/BeethovenSymphonyNo.7_807/02_Beethoven_Sym_No.7_m2.mp3" 
-          },
+          
           "indicazioni_arrivo": "Proseguire dritto lungo Via dei Fori Imperiali fino alla piazza del Colosseo.",
           "tempo_spostamento_da_tappa_precedente": {
             "a_piedi": "10 min",
             "distanza_km": 0.8
           },
           "esperienza_culturale": {
+            "musica": {
+              "movimento": "Sinfonia n. 7, Allegretto",
+              "descrizione_musicale": "Il ritmo di Beethoven evoca il Sublime.",
+              "url_audio": "https://dn721601.ca.archive.org/0/items/BeethovenSymphonyNo.7_807/02_Beethoven_Sym_No.7_m2.mp3" 
+          },
             "letteratura": {
               "citazione": "Ma quando sorge la luna, e la luce / Porge a queste mura una magia gentile... / Lasciando quel che in rovina è più bello.",
               "autore": "Lord Byron",
