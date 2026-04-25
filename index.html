@@ -1074,7 +1074,7 @@
                     musicDiv.innerHTML = `
                         <h4>🎵 ${exp.musica.movimento || 'Brano Musicale'}</h4>
                         <audio controls>
-                            <source src="audio/${tappa.poi_id}.mp3" type="audio/mpeg">
+                            <source src="${exp.musica.url_audio}" type="audio/mpeg">
                             Il tuo browser non supporta l'audio.
                         </audio>
                         <div class="music-description">
