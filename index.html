@@ -1354,35 +1354,34 @@
         // Avvia il quiz
         loadQuestion();
         // ==========================================
-        // TELETRASPORTO DEL QUIZ NELL'ULTIMA TAPPA
+        // TELETRASPORTO STRATEGICO DOPO LA MUSICA
         // ==========================================
         const spostaQuiz = setInterval(() => {
-            // Cerchiamo tutte le card generate
-            const tappe = document.querySelectorAll('.card, .tappa');
+            // Cerchiamo i blocchi musicali generati dal prof
+            const blocchiMusica = document.querySelectorAll('.music-player');
             const quizContainerBox = document.getElementById('byron-quiz-container');
             const contenitoreEsterno = quizContainerBox.parentElement;
 
-            // Se il sistema ha caricato le tappe...
-            if (tappe.length > 0) {
-                // 1. Prendi l'ultima tappa (Il Colosseo)
-                const ultimaTappa = tappe[tappe.length - 1];
+            // Appena lo script del prof ha finito di creare i blocchi musicali...
+            if (blocchiMusica.length > 0) {
+                // 1. Prendi l'ultimo blocco musicale (quello dell'ultima tappa)
+                const ultimaMusica = blocchiMusica[blocchiMusica.length - 1];
                 
-                // 2. Trova l'interno della card
-                const corpoCard = ultimaTappa.querySelector('.card-body') || ultimaTappa;
-
-                // 3. Sposta il quiz dentro l'ultima card, in fondo
-                corpoCard.appendChild(contenitoreEsterno);
+                // 2. Inietta il quiz esattamente DOPO la musica, dentro la stessa tappa!
+                ultimaMusica.after(contenitoreEsterno);
                 
-                // 4. Modifiche estetiche per farlo fondere con la card del Colosseo
-                quizContainerBox.style.border = "none"; // Toglie il bordo a scatola
-                quizContainerBox.style.boxShadow = "none"; // Toglie l'ombra interna
-                quizContainerBox.style.borderTop = "1px dashed var(--secondary-color)"; // Aggiunge linea di separazione
+                // 3. Pulizia estetica per farlo sembrare un blocco nativo del prof
+                quizContainerBox.style.border = "none";
+                quizContainerBox.style.boxShadow = "none";
+                quizContainerBox.style.borderTop = "1px dashed var(--secondary-color)"; // Linea separatrice elegante
                 quizContainerBox.style.marginTop = "2rem";
-                quizContainerBox.style.padding = "2rem 0 0 0"; // Toglie i margini laterali
+                quizContainerBox.style.padding = "2rem 0 0 0";
                 quizContainerBox.style.borderRadius = "0";
                 
-                // Missione compiuta, ferma il controllo
+                // Blocco trovato e spostato, interrompiamo il timer
                 clearInterval(spostaQuiz); 
+            }
+        }, 500); // Controlla ogni mezzo secondo
             }
         }, 500); // Controlla ogni mezzo secondo
     </script>
