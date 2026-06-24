@@ -509,8 +509,8 @@
             }
         }
     </style>
-    <style>
-  /* --- DESIGN SYSTEM CREPUSCOLO BYRONIANO (Parametri C2 e C3) --- */
+<style>
+  /* --- DESIGN SYSTEM CREPUSCOLO BYRONIANO --- */
   
   /* 1. Importazione Font di Google */
   @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
@@ -520,7 +520,7 @@
     --primary-color: #2c1b3d;
     --secondary-color: #b08d57;
     --bg-color: #f4f1ea;
-    --text-color: #2b2b2b;
+    --text-color: #111111; /* Nero profondo per massimo contrasto */
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Lora', serif;
     --shadow-soft: 0 4px 15px rgba(44, 27, 61, 0.1);
@@ -537,13 +537,7 @@
     font-family: var(--font-heading) !important;
     color: var(--primary-color) !important;
   }
-/* Forzatura colore scuro e leggibilità per tutti i testi e descrizioni */
-  p, span, .card-text, .descrizione, li {
-    color: var(--text-color) !important;
-    opacity: 1 !important; /* Rimuove eventuali trasparenze del template originale */
-    font-weight: 500 !important; /* Rende il carattere appena più corposo */
-    line-height: 1.6 !important; /* Aumenta lo spazio tra le righe per far respirare il testo */
-  }
+
   /* 3. Dark Mode Automatica */
   @media (prefers-color-scheme: dark) {
     :root {
@@ -554,7 +548,7 @@
     }
   }
 
-  /* 4. Animazioni Keyframes */
+  /* 4. Animazioni Keyframes (1.8s per maggiore visibilità) */
   @keyframes fadeInTwilight {
     0% { opacity: 0; transform: translateY(40px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -569,6 +563,22 @@
     box-shadow: var(--shadow-soft);
     border-left: 4px solid var(--secondary-color);
     transition: all 0.3s ease;
+  }
+
+  /* 5. Forzatura assoluta per testi leggibili contro il template originale */
+  p, 
+  span, 
+  li, 
+  .text-muted, 
+  .text-secondary, 
+  .card-body p, 
+  .card-text,
+  section p,
+  div[style*="opacity"] {
+      color: var(--text-color) !important;
+      opacity: 1 !important;
+      -webkit-text-fill-color: var(--text-color) !important;
+      font-weight: 500 !important;
   }
 </style>
 </head>
