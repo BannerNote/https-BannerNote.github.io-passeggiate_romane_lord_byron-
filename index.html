@@ -3,20 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passeggiate Romane - Itinerari Tematici</title>
+    <title>Passeggiate Romane - Crepuscolo Byroniano</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <style>
+        /* ========================================
+           DESIGN SYSTEM: CREPUSCOLO BYRONIANO
+           ======================================== */
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+
+        :root {
+            /* Colori Base (Modalità Giorno) */
+            --bg-main: #f4f1ea;          /* Sfondo pagina: pergamena */
+            --bg-card: #ffffff;          /* Sfondo card principali */
+            --bg-card-alt: #f8f9fa;      /* Sfondo sezioni interne (storia, atmosfera) */
+            --bg-quote: #fff9e6;         /* Sfondo citazioni */
+            --text-main: #111111;        /* Testo principale (Nero profondo) */
+            --text-muted: #555555;       /* Testo secondario */
+            
+            /* Colori Tema Byroniano */
+            --primary-color: #2c1b3d;    /* Viola crepuscolare scuro */
+            --secondary-color: #b08d57;  /* Oro antico */
+            --accent-color: #e74c3c;     /* Rosso per percorsi e bottoni */
+            
+            /* Tipografia */
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lora', serif;
+            --shadow-soft: 0 4px 15px rgba(44, 27, 61, 0.1);
+        }
+
+        /* 🌙 Dark Mode Automatica Integrata */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-main: #120e1a;      /* Sfondo pagina: Notte profonda */
+                --bg-card: #1a1525;      /* Sfondo card: Viola molto scuro */
+                --bg-card-alt: #231c33;  /* Sfondo sezioni interne */
+                --bg-quote: #2c221e;     /* Sfondo citazioni scuro */
+                --text-main: #e0dcd3;    /* Testo principale: Grigio perla chiaro */
+                --text-muted: #a9a2b5;   /* Testo secondario chiaro */
+                --primary-color: #d1b3ff;/* Viola lilla per i titoli */
+                --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.6);
+            }
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            font-family: 'Georgia', serif; 
-            background: #f5f5f5;
+            font-family: var(--font-body); 
+            background: var(--bg-main);
+            color: var(--text-main);
             overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
         }
         
         /* === NAVIGATION BAR === */
         #navbar {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, #1e1329 0%, #2c1b3d 100%);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -25,13 +72,10 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
         
-        #navbar h1 {
-            font-size: 1.5em;
-            color: #e74c3c;
-        }
+        #navbar h1 { font-size: 1.5em; color: var(--secondary-color); }
         
         #nav-buttons button {
-            background: rgba(231, 76, 60, 0.8);
+            background: rgba(176, 141, 87, 0.8);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -39,541 +83,130 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
+            font-family: var(--font-heading);
         }
         
         #nav-buttons button:hover {
-            background: #e74c3c;
+            background: var(--secondary-color);
             transform: translateY(-2px);
         }
         
         /* === VIEWS === */
-        .view {
-            display: none;
-        }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeInTwilight 1s ease-out forwards; }
         
-        .view.active {
-            display: block;
-        }
+        /* === HOME VIEW === */
+        #home-view { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        #home-view h2 { text-align: center; font-size: 2.5em; margin-bottom: 15px; }
+        #home-view .subtitle { text-align: center; color: var(--text-muted); font-size: 1.2em; margin-bottom: 40px; }
         
-        /* === HOME VIEW (Selezione Itinerario) === */
-        #home-view {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        #home-view h2 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
-        
-        #home-view .subtitle {
-            text-align: center;
-            color: #7f8c8d;
-            font-size: 1.2em;
-            margin-bottom: 40px;
-        }
-        
-        .itinerari-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
+        .itinerari-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
         
         .itinerario-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-soft);
             transition: all 0.3s;
             cursor: pointer;
         }
+        .itinerario-card:hover { transform: translateY(-10px); border-left: 4px solid var(--secondary-color); }
         
-        .itinerario-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
+        .card-image { height: 200px; background-size: cover; background-position: center; position: relative; }
+        .card-badge { position: absolute; top: 15px; right: 15px; background: var(--secondary-color); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .card-content { padding: 25px; }
+        .card-content h3 { font-size: 1.5em; margin-bottom: 10px; }
+        .card-subtitle { color: var(--text-muted); font-size: 0.95em; margin-bottom: 15px; font-style: italic; }
+        .card-description { color: var(--text-main); line-height: 1.6; margin-bottom: 20px; font-weight: 500; }
         
-        .card-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
+        .card-stats { display: flex; justify-content: space-between; margin-bottom: 20px; padding-top: 15px; border-top: 1px solid rgba(176, 141, 87, 0.2); }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.3em; font-weight: bold; color: var(--secondary-color); }
+        .stat-label { font-size: 0.85em; color: var(--text-muted); }
         
-        .card-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #e74c3c;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-        }
-        
-        .card-content {
-            padding: 25px;
-        }
-        
-        .card-content h3 {
-            color: #2c3e50;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-        
-        .card-subtitle {
-            color: #7f8c8d;
-            font-size: 0.95em;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-        
-        .card-description {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
-        .card-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #ecf0f1;
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        
-        .stat-label {
-            font-size: 0.85em;
-            color: #7f8c8d;
-        }
-        
-        .card-button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .card-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
-        }
+        .card-button { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--secondary-color) 0%, #8e6d3d 100%); color: white; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; transition: all 0.3s; font-family: var(--font-body); }
+        .card-button:hover { transform: scale(1.03); }
         
         /* === ITINERARY VIEW === */
-        #itinerary-view {
-            display: flex;
-            height: calc(100vh - 60px);
-        }
+        #itinerary-view { display: flex; height: calc(100vh - 60px); }
         
         /* Timeline Sidebar */
-        #timeline-sidebar {
-            width: 280px;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 20px;
-            overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-        }
+        #timeline-sidebar { width: 280px; background: linear-gradient(135deg, #1e1329 0%, #2c1b3d 100%); color: white; padding: 20px; overflow-y: auto; box-shadow: 2px 0 10px rgba(0,0,0,0.3); }
+        #timeline-title { font-size: 1.2em; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid rgba(255,255,255,0.2); color: var(--secondary-color); font-family: var(--font-heading); }
+        #progress-bar { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        #progress-fill { background: var(--secondary-color); height: 100%; width: 0%; transition: width 0.5s; }
         
-        #timeline-title {
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(255,255,255,0.2);
-            color: #e74c3c;
-        }
-        
-        #progress-bar {
-            background: rgba(255,255,255,0.1);
-            height: 8px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        
-        #progress-fill {
-            background: #e74c3c;
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s;
-        }
-        
-        .timeline-item {
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border-left: 4px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .timeline-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .timeline-item.completed {
-            border-left-color: #2ecc71;
-            background: rgba(46, 204, 113, 0.1);
-        }
-        
-        .timeline-item.current {
-            border-left-color: #e74c3c;
-            background: rgba(231, 76, 60, 0.2);
-        }
-        
-        .timeline-item.upcoming {
-            border-left-color: #95a5a6;
-            opacity: 0.6;
-        }
-        
-        .timeline-icon {
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-        
-        .timeline-time {
-            font-size: 0.85em;
-            color: #f39c12;
-            font-weight: bold;
-        }
-        
-        .timeline-name {
-            font-size: 1em;
-            margin-top: 5px;
-        }
-        
-        .timeline-duration {
-            font-size: 0.8em;
-            color: #bdc3c7;
-            margin-top: 3px;
-        }
+        .timeline-item { padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid transparent; cursor: pointer; transition: all 0.3s; }
+        .timeline-item:hover { background: rgba(255,255,255,0.1); }
+        .timeline-item.completed { border-left-color: #2ecc71; background: rgba(46, 204, 113, 0.1); }
+        .timeline-item.current { border-left-color: var(--secondary-color); background: rgba(176, 141, 87, 0.2); }
+        .timeline-item.upcoming { border-left-color: #95a5a6; opacity: 0.6; }
+        .timeline-icon { font-size: 2em; margin-bottom: 5px; }
+        .timeline-time { font-size: 0.85em; color: var(--secondary-color); font-weight: bold; }
+        .timeline-name { font-size: 1em; margin-top: 5px; font-family: var(--font-body); }
+        .timeline-duration { font-size: 0.8em; color: #bdc3c7; margin-top: 3px; }
         
         /* Main Content */
-        #itinerary-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        #map-container {
-            flex: 1;
-            position: relative;
-        }
-        
-        #map {
-            width: 100%;
-            height: 100%;
-        }
+        #itinerary-content { flex: 1; display: flex; flex-direction: column; }
+        #map-container { flex: 1; position: relative; }
+        #map { width: 100%; height: 100%; }
         
         /* Dettagli Tappa */
-        #tappa-details {
-            height: 40%;
-            background: white;
-            padding: 30px;
-            overflow-y: auto;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
-        }
+        #tappa-details { height: 40%; background: var(--bg-card); padding: 30px; overflow-y: auto; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
+        #tappa-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(176, 141, 87, 0.3); }
+        #tappa-numero { font-size: 3em; color: var(--secondary-color); font-weight: bold; font-family: var(--font-heading); }
+        #tappa-nome { flex: 1; margin: 0 20px; }
+        #tappa-nome h2 { font-size: 1.8em; }
+        #tappa-nome .descrizione-breve { color: var(--text-main); font-weight: 500; margin-top: 5px; line-height: 1.6;}
         
-        #tappa-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ecf0f1;
-        }
+        #tappa-orario { text-align: right; }
+        #tappa-orario .time { font-size: 1.5em; color: var(--secondary-color); font-weight: bold; }
+        #tappa-orario .moment { font-size: 0.9em; color: var(--text-muted); text-transform: capitalize; }
         
-        #tappa-numero {
-            font-size: 3em;
-            color: #e74c3c;
-            font-weight: bold;
-        }
+        /* Elementi del Content */
+        .esperienza-section { margin: 25px 0; padding: 20px; background: var(--bg-card-alt); border-radius: 10px; border-left: 4px solid var(--primary-color); }
+        .esperienza-section h3 { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-size: 1.3em;}
+        .esperienza-section p { line-height: 1.6; color: var(--text-main); font-weight: 500; }
         
-        #tappa-nome {
-            flex: 1;
-            margin: 0 20px;
-        }
+        .music-player { background: linear-gradient(135deg, var(--primary-color) 0%, #4a2d66 100%); padding: 20px; border-radius: 10px; color: white; margin: 20px 0; }
+        .music-player h4 { margin-bottom: 15px; font-size: 1.2em; color: #fff; }
+        .music-player audio { width: 100%; margin-bottom: 10px; }
+        .music-description { font-size: 0.95em; line-height: 1.6; font-style: italic; color: #f4f1ea;}
         
-        #tappa-nome h2 {
-            color: #2c3e50;
-            font-size: 1.8em;
-        }
+        .citazione-box { background: var(--bg-quote); border-left: 4px solid var(--secondary-color); padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .citazione-text { font-size: 1.1em; font-style: italic; line-height: 1.7; color: var(--text-main); margin-bottom: 10px; font-weight: 500; }
+        .citazione-author { text-align: right; color: var(--text-muted); font-size: 0.95em; }
         
-        #tappa-orario {
-            text-align: right;
-        }
-        
-        #tappa-orario .time {
-            font-size: 1.5em;
-            color: #e74c3c;
-            font-weight: bold;
-        }
-        
-        #tappa-orario .moment {
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
-        
-        /* Esperienza Culturale */
-        .esperienza-section {
-            margin: 25px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid #3498db;
-        }
-        
-        .esperienza-section h3 {
-            color: #3498db;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        /* Audio Player */
-        .music-player {
-            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
-            padding: 20px;
-            border-radius: 10px;
-            color: white;
-            margin: 20px 0;
-        }
-        
-        .music-player h4 {
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        
-        .music-player audio {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        
-        .music-description {
-            font-size: 0.9em;
-            line-height: 1.6;
-            font-style: italic;
-        }
-        
-        /* Citazione Letteraria */
-        .citazione-box {
-            background: #fff9e6;
-            border-left: 4px solid #f39c12;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .citazione-text {
-            font-size: 1.1em;
-            font-style: italic;
-            line-height: 1.7;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        
-        .citazione-author {
-            text-align: right;
-            color: #7f8c8d;
-            font-size: 0.95em;
-        }
-        
-        /* Atmosfera */
-        .atmosfera-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .atmosfera-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .atmosfera-item .icon {
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-        
-        .atmosfera-item .label {
-            font-size: 0.85em;
-            color: #7f8c8d;
-            margin-bottom: 5px;
-        }
-        
-        .atmosfera-item .value {
-            font-weight: bold;
-            color: #2c3e50;
-        }
+        .atmosfera-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+        .atmosfera-item { background: var(--bg-card); padding: 15px; border-radius: 8px; text-align: center; box-shadow: var(--shadow-soft); }
+        .atmosfera-item .icon { font-size: 2em; margin-bottom: 5px; }
+        .atmosfera-item .label { font-size: 0.85em; color: var(--text-muted); margin-bottom: 5px; }
+        .atmosfera-item .value { font-weight: bold; color: var(--primary-color); }
         
         /* Navigation Buttons */
-        #tappa-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 15px;
-        }
+        #tappa-navigation { display: flex; justify-content: space-between; margin-top: 30px; gap: 15px; }
+        .nav-btn { flex: 1; padding: 15px; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; transition: all 0.3s; font-family: var(--font-body); }
+        .nav-btn.prev { background: var(--bg-card-alt); color: var(--text-main); border: 1px solid var(--text-muted); }
+        .nav-btn.prev:hover { background: var(--primary-color); color: white; }
+        .nav-btn.next { background: var(--secondary-color); color: white; }
+        .nav-btn.next:hover { transform: translateX(5px); }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
-        .nav-btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
+        /* Animazioni Custom */
+        @keyframes fadeInTwilight {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
-        
-        .nav-btn.prev {
-            background: #95a5a6;
-            color: white;
-        }
-        
-        .nav-btn.prev:hover {
-            background: #7f8c8d;
-        }
-        
-        .nav-btn.next {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .nav-btn.next:hover {
-            background: #c0392b;
-            transform: translateX(5px);
-        }
-        
-        .nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* Scrollbar */
-        #timeline-sidebar::-webkit-scrollbar,
-        #tappa-details::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        #timeline-sidebar::-webkit-scrollbar-track,
-        #tappa-details::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
-        }
-        
-        #timeline-sidebar::-webkit-scrollbar-thumb,
-        #tappa-details::-webkit-scrollbar-thumb {
-            background: rgba(231, 76, 60, 0.5);
-            border-radius: 4px;
-        }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
-            #itinerary-view {
-                flex-direction: column;
-            }
-            
-            #timeline-sidebar {
-                width: 100%;
-                height: 150px;
-                overflow-x: auto;
-                overflow-y: hidden;
-            }
-            
-            .itinerari-grid {
-                grid-template-columns: 1fr;
-            }
+            #itinerary-view { flex-direction: column; }
+            #timeline-sidebar { width: 100%; height: 150px; overflow-x: auto; overflow-y: hidden; }
+            .itinerari-grid { grid-template-columns: 1fr; }
         }
     </style>
-<style>
-  /* --- DESIGN SYSTEM CREPUSCOLO BYRONIANO --- */
-  @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
-
-  :root {
-    --primary-color: #2c1b3d;
-    --secondary-color: #b08d57;
-    --bg-color: #f4f1ea;
-    --text-color: #111111;
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Lora', serif;
-    --shadow-soft: 0 4px 15px rgba(44, 27, 61, 0.1);
-  }
-
-  /* Dark Mode */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg-color: #1a1525; /* Sfondo scuro notturno */
-      --text-color: #e0dcd3; /* Testo chiaro leggibile */
-      --primary-color: #d1b3ff; /* Lilla per i titoli */
-      --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }
-  }
-
-  /* Applicazione Sfondo e Testo (Ora include anche le CARD del prof) */
-  body, .card, .card-body, .list-group-item, .bg-light, .bg-white {
-    background-color: var(--bg-color) !important;
-    color: var(--text-color) !important;
-    font-family: var(--font-body) !important;
-    transition: all 0.4s ease;
-  }
-
-  h1, h2, h3, h4, h5, h6, .titolo-tappa, .card-title {
-    font-family: var(--font-heading) !important;
-    color: var(--primary-color) !important;
-    -webkit-text-fill-color: var(--primary-color) !important;
-  }
-
-  /* Forzatura testo paragrafi */
-  p, span, li, a, .text-muted, .text-secondary, .card-text {
-      color: var(--text-color) !important;
-      opacity: 1 !important;
-      -webkit-text-fill-color: var(--text-color) !important;
-      font-weight: 500 !important;
-  }
-
-  /* Animazioni Keyframes (1.8s) */
-  @keyframes fadeInTwilight {
-    0% { opacity: 0; transform: translateY(40px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  .tappa, .card, section, .poi-container {
-    animation: fadeInTwilight 1.8s ease-out forwards;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-soft);
-    border-left: 4px solid var(--secondary-color);
-  }
-</style>
 </head>
 <body>
-    <!-- Navigation Bar -->
     <div id="navbar">
         <h1>🏛️ Passeggiate Romane</h1>
         <div id="nav-buttons">
@@ -582,37 +215,29 @@
         </div>
     </div>
     
-    <!-- HOME VIEW: Selezione Itinerario -->
     <div id="home-view" class="view active">
         <h2>Itinerari Tematici</h2>
         <p class="subtitle">Scopri Roma attraverso passeggiate culturali guidate da personaggi storici</p>
         
         <div id="itinerari-container" class="itinerari-grid">
-            <!-- Le card degli itinerari saranno generate dinamicamente -->
-        </div>
+            </div>
     </div>
     
-    <!-- ITINERARY VIEW: Visualizzazione Percorso -->
     <div id="itinerary-view" class="view">
-        <!-- Timeline Sidebar -->
         <div id="timeline-sidebar">
             <div id="timeline-title">Timeline Itinerario</div>
             <div id="progress-bar">
                 <div id="progress-fill"></div>
             </div>
             <div id="timeline-items">
-                <!-- Timeline items generati dinamicamente -->
-            </div>
+                </div>
         </div>
         
-        <!-- Main Content -->
         <div id="itinerary-content">
-            <!-- Mappa -->
             <div id="map-container">
                 <div id="map"></div>
             </div>
             
-            <!-- Dettagli Tappa -->
             <div id="tappa-details">
                 <div id="tappa-header">
                     <div id="tappa-numero"></div>
@@ -627,8 +252,7 @@
                 </div>
                 
                 <div id="tappa-content">
-                    <!-- Contenuto dinamico -->
-                </div>
+                    </div>
                 
                 <div id="tappa-navigation">
                     <button class="nav-btn prev" onclick="previousTappa()">← Tappa Precedente</button>
@@ -650,482 +274,229 @@
         let markers = [];
         let routeLine = null;
         
+        // Variabili Quiz
+        let quizScore = 0;
+        let quizCurrentQuestion = 0;
+        const quizData = [
+            {
+                question: "1. In quale anno Lord Byron arrivò a Roma, definendola 'Città dell'anima'?",
+                options: ["1815", "1817", "1821", "1824"],
+                correct: 1 
+            },
+            {
+                question: "2. Quale celebre luogo romano era il crocevia degli artisti romantici internazionali?",
+                options: ["Piazza Navona", "Castel Sant'Angelo", "Antico Caffè Greco", "Pantheon"],
+                correct: 2
+            },
+            {
+                question: "3. Davanti a quale monumento Byron provò un senso di malinconia e Sublime al crepuscolo?",
+                options: ["Il Colosseo", "La Fontana di Trevi", "Il Pantheon", "I Fori Imperiali"],
+                correct: 0
+            }
+        ];
+
         // Icone momenti della giornata
         const momentIcons = {
-            'alba': '🌅',
-            'mattino': '☀️',
-            'mezzogiorno': '🌞',
-            'pomeriggio': '🌤️',
-            'crepuscolo': '🌆',
-            'sera': '🌃'
+            'alba': '🌅', 'mattino': '☀️', 'mezzogiorno': '🌞',
+            'pomeriggio': '🌤️', 'crepuscolo': '🌆', 'sera': '🌃'
         };
         
         // ========================================
-        // INIZIALIZZAZIONE
+        // INIZIALIZZAZIONE & CARICAMENTO DATI
         // ========================================
         async function init() {
-            console.log('🚀 Inizializzazione Passeggiate Romane...');
             await loadItinerariData();
             renderItinerariCards();
         }
         
-        // ========================================
-        // CARICAMENTO DATI
-        // ========================================
         async function loadItinerariData() {
             try {
                 const response = await fetch('data.json');
                 if (!response.ok) throw new Error('File non trovato');
-                
                 const data = await response.json();
                 itinerariData = data.itinerari;
-                console.log(`✅ Caricati ${itinerariData.length} itinerari`);
             } catch (error) {
-                console.error('❌ Errore caricamento:', error);
-                // Fallback: usa dati embedded
-                itinerariData = getEmbeddedItinerari();
+                // Fallback: usa dati embedded (Il tuo JSON originale)
+                itinerariData = [{
+                    "id": "crepuscolo_byroniano",
+                    "nome": "Crepuscolo Byroniano",
+                    "sottotitolo": "Roma: Città dell'Anima sulle tracce di Lord Byron",
+                    "tema": "Letteratura - Viaggio Romantico",
+                    "durata_totale_ore": 12,
+                    "distanza_totale_km": 2.5,
+                    "descrizione": "Un pellegrinaggio emotivo diviso in quattro momenti della giornata. Dalla nostalgia mattutina al sublime del crepuscolo, questo itinerario ripercorre i passi dell'eroe byroniano alla ricerca dell'infinito tra le rovine della Città Eterna.",
+                    "tappe": [
+                        {
+                            "numero": 1, "nome": "Piazza di Spagna e Residenza", "orario_consigliato": "08:30", "momento_giornata": "mattino", "durata_visita_min": 45, "coordinate": [41.9057, 12.4823],
+                            "descrizione_breve": "Inizia qui, al civico 66, il pellegrinaggio romano di Lord Byron nella primavera del 1817.",
+                            "storia": "Nella primavera del 1817 Byron prese in affitto un appartamento in questa piazza, all'epoca centro nevralgico della vita degli stranieri a Roma.",
+                            "esperienza_culturale": {
+                                "letteratura": { "citazione": "Sono innamorato di Roma... è la città dell'anima.", "autore": "Lord Byron", "opera": "Lettere a Thomas Moore", "anno": 1817 },
+                                "atmosfera": { "luce": "fresca e azzurrina", "temperatura_stimata": "14-16°C", "affollamento": "basso", "emozione_target": "Nostalgia" }
+                            }
+                        },
+                        {
+                            "numero": 2, "nome": "Antico Caffè Greco", "orario_consigliato": "16:00", "momento_giornata": "pomeriggio", "durata_visita_min": 60, "coordinate": [41.9054, 12.4815],
+                            "descrizione_breve": "In Via dei Condotti 86 si varca la soglia della storia. Qui Byron si incontrava con artisti e intellettuali.",
+                            "storia": "Fondato nel 1760, è il più antico caffè di Roma. Fu crocevia di intellettuali da Goethe a Schopenhauer, da Keats a Byron.",
+                            "esperienza_culturale": {
+                                "letteratura": { "citazione": "I grandi poeti e gli artisti siedono in queste stanze fumose, dove l'arte non ha nazione.", "autore": "Lord Byron", "opera": "Diari", "anno": 1817 },
+                                "atmosfera": { "luce": "soffusa, calda", "temperatura_stimata": "Interiore", "affollamento": "alto", "emozione_target": "Genio" }
+                            }
+                        },
+                        {
+                            "numero": 3, "nome": "Foro Romano", "orario_consigliato": "18:00", "momento_giornata": "sera", "durata_visita_min": 60, "coordinate": [41.8925, 12.4853],
+                            "descrizione_breve": "Davanti ai marmi sgretolati e riconquistati dalla natura, Byron provò il vero Sublime romantico.",
+                            "storia": "Agli inizi dell'Ottocento, l'area non era ancora stata del tutto scavata. Colonne e archi emergevano dal terreno ricoperti di vegetazione.",
+                            "esperienza_culturale": {
+                                "letteratura": { "citazione": "Oh Roma! Patria mia! Città dell'anima! Gli orfani del cuore si volgano a te...", "autore": "Lord Byron", "opera": "Childe Harold's Pilgrimage", "anno": 1818 },
+                                "atmosfera": { "luce": "dorata, ombre lunghe", "temperatura_stimata": "18-20°C", "affollamento": "Medio", "emozione_target": "Malinconia" }
+                            }
+                        },
+                        {
+                            "numero": 4, "nome": "Il Colosseo", "orario_consigliato": "19:30", "momento_giornata": "crepuscolo", "durata_visita_min": 60, "coordinate": [41.8902, 12.4922],
+                            "descrizione_breve": "Il culmine del viaggio. Raggiungere il Colosseo al calar del sole significa abbracciare l'essenza dell'epistemologia romantica.",
+                            "storia": "Simbolo della grandezza e brutalità di Roma. Fino alla fine dell'Ottocento, l'interno era una foresta di piante rare.",
+                            "esperienza_culturale": {
+                                "letteratura": { "citazione": "Ma quando sorge la luna, e la luce porge a queste mura una magia gentile...", "autore": "Lord Byron", "opera": "Manfred", "anno": 1817 },
+                                "atmosfera": { "luce": "viola scuro, blu notte", "temperatura_stimata": "15-17°C", "affollamento": "Basso", "emozione_target": "Estasi" }
+                            }
+                        }
+                    ]
+                }];
             }
-        }
-        
-        function getEmbeddedItinerari() {
-            // Versione semplificata embedded come fallback
-            return [{
-  "itinerari": [
-    {
-      "id": "crepuscolo_byroniano",
-      "nome": "Crepuscolo Byroniano",
-      "sottotitolo": "Roma: Città dell'Anima sulle tracce di Lord Byron",
-      "personaggio": {
-        "nome": "George Gordon, Lord Byron",
-        "anni": "1788-1824",
-        "professione": "Poeta",
-        "nazionalita": "Britannica",
-        "biografia_breve": "Figura iconica del Romanticismo europeo. Aristocratico, ribelle e in esilio volontario, soggiornò a Roma nella primavera del 1817. L'impatto con le rovine romane lo ispirò a completare il suo capolavoro, consacrando Roma come 'Città dell'anima' e simbolo del sentimento malinconico.",
-        "immagine": "assets/personaggi/byron.jpg",
-        "opere_correlate": [
-          "Childe Harold's Pilgrimage (Canto IV)",
-          "Manfred",
-          "Lettere e Diari (1817)"
-        ]
-      },
-      "tema": "Letteratura - Viaggio Romantico",
-      "categoria": "Arte, Storia e Letteratura",
-      "durata_totale_ore": 12,
-      "difficolta": "facile",
-      "immagine_copertina": "http://googleusercontent.com/image_collection/image_retrieval/1012670391132669225_0",
-      "distanza_totale_km": 2.5,
-      "periodo_consigliato": "Primavera/Autunno (per la luce crepuscolare)",
-      "stagione_migliore": ["aprile", "maggio", "settembre", "ottobre"],
-      "descrizione": "Un pellegrinaggio emotivo diviso in quattro momenti della giornata. Dalla nostalgia mattutina al sublime del crepuscolo, questo itinerario ripercorre i passi dell'eroe byroniano alla ricerca dell'infinito tra le rovine della Città Eterna.",
-      "note_logistiche": "L'itinerario non è continuo ma segue il variare della luce durante la giornata. Prevede una pausa tra la mattina e il tardo pomeriggio. Il percorso a piedi effettivo è breve, il focus è sulla permanenza emotiva nei luoghi.",
-      "accessibilita": "Completamente accessibile a piedi o con mezzi pubblici nel centro storico.",
-      "costo_stimato": "Gratuito (esclusa l'eventuale consumazione al Caffè Greco)",
-      "tappe": [
-        {
-          "numero": 1,
-          "poi_id": "piazza_spagna_byron",
-          "orario_consigliato": "08:30",
-          "momento_giornata": "mattino",
-          "durata_visita_min": 45,
-          "coordinate": [41.9057, 12.4823],
-          "nome": "Piazza di Spagna e Residenza",
-          "descrizione_breve": "Inizia qui, al civico 66, il pellegrinaggio romano di Lord Byron nella primavera del 1817 (cerca la targa commemorativa sul palazzo). Fuggito dall Inghilterra a causa degli scandali, il poeta arrivo in questa piazza portando con se l inquietudine dell esule. Questo luogo rappresenta lo Zehnsucht romantico: lo struggimento e la ricerca di un rifugio per l anima attraverso la bellezza e l arte. A pochi passi, al civico 26, sorge la Keats-Shelley House, tempio della poesia romantica inglese.",
-          "indicazioni_arrivo": "Metro A, fermata Spagna. Posizionarsi ai piedi della scalinata di Trinità dei Monti.",
-          "esperienza_culturale": {
-            "letteratura": {
-              "citazione": "Sono innamorato di Roma... è la città dell'anima.",
-              "opera": "Lettere a Thomas Moore",
-              "anno": 1817,
-              "contesto": "Byron esprime il suo primo impatto folgorante con la città appena giunto nel suo appartamento al civico 66."
-            },
-            "atmosfera": {
-              "momento": "mattino",
-              "luce": "fresca e azzurrina, prime luci sui tetti",
-              "suoni_ambiente": [
-                "rumore dell'acqua della Barcaccia",
-                "passi sui sanpietrini",
-                "risveglio della città"
-              ],
-              "temperatura_stimata": "14-16°C",
-              "affollamento": "basso",
-              "emozione_target": "Nostalgia (Solitude)"
-            },
-            "arte_visiva": {
-              "stile_architettonico": "Barocco",
-              "luogo_chiave": "Palazzo al civico 66 e Keats-Shelley House (civico 26)",
-              "descrizione": "Il salotto a cielo aperto dei viaggiatori del Grand Tour."
-            }
-          },
-          "storia": "Nella primavera del 1817 Byron prese in affitto un appartamento in questa piazza, all'epoca centro nevralgico della vita degli stranieri a Roma.",
-          "connessione_byron": "Rappresenta il concetto di 'Zehnsucht': lo struggimento romantico e la ricerca di un rifugio per l'anima in fuga dalla società.",
-          "metadata": {
-            "accessibilita": "Piazza pubblica, sempre aperta",
-            "orari_standard": "24/7 (Keats-Shelley House: 10:00-13:00 / 14:00-18:00)"
-          }
-        },
-        {
-          "numero": 2,
-          "poi_id": "caffe_greco",
-          "orario_consigliato": "16:00",
-          "momento_giornata": "pomeriggio",
-          "durata_visita_min": 60,
-          "coordinate": [41.9054, 12.4815],
-          "nome": "Antico Caffè Greco",
-          "descrizione_breve": "In Via dei Condotti 86 si varca la soglia della storia. In questo celebre caffe ottocentesco Byron si incontrava con artisti, scultori e intellettuali giunti a Roma per il Grand Tour. Il Caffe Greco e il simbolo del Romanticismo internazionale: non piu un arte confinata alle regole rigide di una nazione, ma un crocevia cosmopolita dove idee, ribellione e creativita diventavano un linguaggio universale condiviso davanti a una tazza di caffe.",
-          "indicazioni_arrivo": "Da Piazza di Spagna, imboccare Via dei Condotti. Il locale si trova al civico 86.",
-          "tempo_spostamento_da_tappa_precedente": {
-            "a_piedi": "3 min",
-            "distanza_km": 0.2
-          },
-          "esperienza_culturale": {
-            "letteratura": {
-              "citazione": "I grandi poeti e gli artisti siedono in queste stanze fumose, dove l'arte non ha nazione.",
-              "contesto": "Il fermento intellettuale dei ritrovi bohémien dell'Ottocento."
-            },
-            "atmosfera": {
-              "momento": "pomeriggio",
-              "luce": "soffusa, calda, interni vellutati",
-              "suoni_ambiente": [
-                "tintinnio di tazzine",
-                "brusio in diverse lingue",
-                "scricchiolio del legno"
-              ],
-              "affollamento": "alto",
-              "emozione_target": "Genio (Intellect)"
-            },
-            "arte_visiva": {
-              "stile_architettonico": "Interni storici ottocenteschi",
-              "descrizione": "Sale labirintiche adorne di oltre 300 opere d'arte, specchi e stucchi."
-            }
-          },
-          "storia": "Fondato nel 1760, è il più antico caffè di Roma. Fu crocevia di intellettuali da Goethe a Schopenhauer, da Keats a Byron.",
-          "connessione_byron": "Qui Byron recitava il suo ruolo di dandy tormentato, mescolandosi con la comunità artistica internazionale.",
-          "metadata": {
-            "accessibilita": "Locale commerciale aperti al pubblico",
-            "servizi": ["Servizio al tavolo", "Galleria d'arte interna"]
-          }
-        },
-        {
-          "numero": 3,
-          "poi_id": "foro_romano",
-          "orario_consigliato": "18:00",
-          "momento_giornata": "sera",
-          "durata_visita_min": 60,
-          "coordinate": [41.8925, 12.4853],
-          "nome": "Foro Romano",
-          "descrizione_breve": "Affacciandosi su Via dei Fori Imperiali, ci si scontra con l immensita della storia ferita. Davanti ai marmi sgretolati e riconquistati dalla natura, Byron provo il vero Sublime romantico: un misto di sgomento e meraviglia. Non guardava a queste rovine con l occhio clinico di un archeologo, ma con profonda malinconia. Le colonne spezzate gli ricordavano che anche i piu grandi imperi crollano, sancendo il trionfo del sentimento umano sulla caducita della gloria terrena.",
-          "indicazioni_arrivo": "Passeggiata lungo Via del Corso, Piazza Venezia, fino a Via dei Fori Imperiali.",
-          "tempo_spostamento_da_tappa_precedente": {
-            "a_piedi": "20 min",
-            "distanza_km": 1.5
-          },
-          "esperienza_culturale": {
-            "letteratura": {
-              "citazione": "Oh Roma! Patria mia! Città dell'anima! / Gli orfani del cuore si volgano a te, / Genitrice di imperi defunti...",
-              "autore": "Lord Byron",
-              "opera": "Childe Harold's Pilgrimage (Canto IV, Stanza 78)",
-              "anno": 1818,
-              "contesto": "La meditazione sulla caducità della grandezza umana davanti alle rovine."
-            },
-            "atmosfera": {
-              "momento": "sera",
-              "luce": "dorata, ombre lunghe sui marmi",
-              "suoni_ambiente": [
-                "vento tra le rovine",
-                "lontananza del traffico moderno"
-              ],
-              "temperatura_stimata": "18-20°C",
-              "consiglio_fotografico": "Catturare i controluce delle colonne dei templi. Enfatizzare il verde della vegetazione sulle pietre antiche.",
-              "emozione_target": "Malinconia (Decadence)"
-            },
-            "arte_visiva": {
-              "stile_architettonico": "Antichità Romana in rovina",
-              "descrizione": "Il cuore politico e religioso dell'Impero Romano, all'epoca di Byron noto in parte come 'Campo Vaccino'."
-            }
-          },
-          "storia": "Agli inizi dell'Ottocento, l'area non era ancora stata del tutto scavata. Colonne e archi emergevano dal terreno ricoperti di vegetazione, pascolati dalle mucche.",
-          "connessione_byron": "La quintessenza del romanticismo: l'esule che si confronta con il Sublime, trovando conforto nel fatto che anche i più grandi imperi crollano.",
-          "metadata": {
-            "accessibilita": "Vista panoramica gratuita da Via dei Fori Imperiali",
-            "orari_standard": "Passeggiata su strada sempre aperta"
-          }
-        },
-        {
-          "numero": 4,
-          "poi_id": "colosseo_crepuscolo",
-          "orario_consigliato": "19:30",
-          "momento_giornata": "crepuscolo",
-          "durata_visita_min": 60,
-          "coordinate": [41.8902, 12.4922],
-          "nome": "Il Colosseo",
-          "descrizione_breve": "Il culmine del viaggio. Byron detestava visitare l Anfiteatro Flavio di giorno, circondato dai turisti e dal clamore. Lo amava al crepuscolo o al chiaro di luna, immerso nel silenzio. Raggiungere il Colosseo al calar del sole significa abbracciare l essenza dell epistemologia romantica: l oscurita cancella i calcoli razionali e lascia spazio solo all intuizione e all emozione pura. E qui, nella solitudine davanti al gigante di pietra, che l uomo si ricongiunge con il mistero dell esistenza.",
-          "indicazioni_arrivo": "Proseguire dritto lungo Via dei Fori Imperiali fino alla piazza del Colosseo.",
-          "tempo_spostamento_da_tappa_precedente": {
-            "a_piedi": "10 min",
-            "distanza_km": 0.8
-          },
-          "esperienza_culturale": {
-            "letteratura": {
-              "citazione": "Ma quando sorge la luna, e la luce / Porge a queste mura una magia gentile... / Lasciando quel che in rovina è più bello.",
-              "autore": "Lord Byron",
-              "opera": "Manfred (Atto III, Scena 4)",
-              "anno": 1817,
-              "contesto": "Il protagonista Manfred ricorda la sua visita solitaria e mistica al Colosseo."
-            },
-            "atmosfera": {
-              "momento": "crepuscolo",
-              "luce": "viola scuro, rosso morente, blu notte profondo",
-              "suoni_ambiente": [
-                "silenzio monumentale",
-                "uccelli notturni"
-              ],
-              "temperatura_stimata": "15-17°C",
-              "consiglio_fotografico": "Cavalletto obbligatorio. Fotografare la mole scura dell'anfiteatro con il cielo crepuscolare violaceo sullo sfondo.",
-              "emozione_target": "Estasi (Infinity)"
-            },
-            "arte_visiva": {
-              "stile_architettonico": "Architettura Imperiale Romana",
-              "descrizione": "Il più grande anfiteatro del mondo. Nel Romanticismo, le sue arcate sbrecciate erano considerate l'apice dell'estetica gotica e rovinista."
-            }
-          },
-          "storia": "Simbolo della grandezza e brutalità di Roma. Fino alla fine dell'Ottocento, l'interno era una foresta di piante rare cresciute spontaneamente tra i ruderi.",
-          "connessione_byron": "Il culmine del viaggio. Byron detestava la razionalità solare: solo nell'oscurità il poeta si sente unito all'infinito e al mistero dell'esistenza.",
-          "metadata": {
-            "accessibilita": "Piazza esterna sempre aperta e gratuita",
-            "orari_standard": "Illuminazione serale attiva"
-          }
-        }
-      ],
-      "mappa_percorso": {
-        "colore_percorso": "#4a235a",
-        "stile_linea": "solid",
-        "nota_visiva": "Il colore viola/antracite richiama l'atmosfera crepuscolare"
-      },
-      "consigli_pratici": [
-        "Dividere l'itinerario: fare la Tappa 1 e 2 al mattino/pomeriggio, e la Tappa 3 e 4 verso sera.",
-        "Portare la macchina fotografica per catturare i cali di luce.",
-        "Leggere i versi del Canto IV del Childe Harold prima di arrivare ai Fori.",
-        "Scarpe comode per i sanpietrini di Via dei Fori Imperiali."
-      ],
-      "migliore_periodo_anno": "Aprile-Maggio (lo stesso periodo in cui Byron fu a Roma) o inizio autunno.",
-      "sconsigliato": ["Piena estate (si perde l'effetto nebbioso/romantico delle luci)", "Ore centrali della giornata (rovina l'atmosfera byroniana)"],
-      "cosa_portare": [
-        "Un taccuino e una penna",
-        "Smartphone o reflex per foto al crepuscolo",
-        "Abbigliamento a strati per lo sbalzo termico serale",
-        "Il poema 'Childe Harold's Pilgrimage' o 'Manfred'"
-      ]
-    }
-  ]
-}];
         }
         
         // ========================================
-        // RENDERING HOME
+        // RENDERING VIEWS & MAP
         // ========================================
         function renderItinerariCards() {
             const container = document.getElementById('itinerari-container');
             container.innerHTML = '';
-            
             itinerariData.forEach(itinerario => {
                 const card = document.createElement('div');
                 card.className = 'itinerario-card';
                 card.onclick = () => startItinerario(itinerario.id);
-                
                 card.innerHTML = `
-<div class="card-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://www.artesvelata.it/wp-content/uploads/2021/01/Il-Colosseo-al-tramonto-arte-svelata.jpg')">                        <div class="card-badge">${itinerario.tema || 'Culturale'}</div>
+                    <div class="card-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://www.artesvelata.it/wp-content/uploads/2021/01/Il-Colosseo-al-tramonto-arte-svelata.jpg')">
+                        <div class="card-badge">${itinerario.tema || 'Culturale'}</div>
                     </div>
                     <div class="card-content">
                         <h3>${itinerario.nome}</h3>
-                        
                         <p class="card-subtitle">${itinerario.sottotitolo || ''}</p>
                         <p class="card-description">${itinerario.descrizione}</p>
-                        
                         <div class="card-stats">
-                            <div class="stat">
-                                <div class="stat-value">⏱️ ${itinerario.durata_totale_ore}h</div>
-                                <div class="stat-label">Durata</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">📍 ${itinerario.tappe.length}</div>
-                                <div class="stat-label">Tappe</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">🚶 ${itinerario.distanza_totale_km}km</div>
-                                <div class="stat-label">Distanza</div>
-                            </div>
+                            <div class="stat"><div class="stat-value">⏱️ ${itinerario.durata_totale_ore}h</div><div class="stat-label">Durata</div></div>
+                            <div class="stat"><div class="stat-value">📍 ${itinerario.tappe.length}</div><div class="stat-label">Tappe</div></div>
+                            <div class="stat"><div class="stat-value">🚶 ${itinerario.distanza_totale_km}km</div><div class="stat-label">Distanza</div></div>
                         </div>
-                        
                         <button class="card-button">Inizia Passeggiata →</button>
                     </div>
                 `;
-                
                 container.appendChild(card);
             });
         }
         
-        // ========================================
-        // START ITINERARIO
-        // ========================================
         function startItinerario(itinerarioId) {
             currentItinerario = itinerariData.find(it => it.id === itinerarioId);
             if (!currentItinerario) return;
-            
             currentTappaIndex = 0;
-            
             showView('itinerary');
             initMap();
             renderTimeline();
             loadTappa(0);
         }
         
-        // ========================================
-        // GESTIONE VIEWS
-        // ========================================
         function showView(viewName) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(`${viewName}-view`).classList.add('active');
-            
-            const backBtn = document.getElementById('back-to-itinerary-btn');
-            backBtn.style.display = viewName === 'itinerary' ? 'inline-block' : 'none';
+            document.getElementById('back-to-itinerary-btn').style.display = viewName === 'itinerary' ? 'inline-block' : 'none';
         }
         
-        // ========================================
-        // MAPPA
-        // ========================================
         function initMap() {
             if (map) map.remove();
-            
             map = L.map('map').setView([41.9028, 12.4964], 13);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
-            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
             drawRoute();
             addMarkers();
         }
         
         function drawRoute() {
             const coordinates = currentItinerario.tappe.map(t => t.coordinate);
-            
             if (routeLine) map.removeLayer(routeLine);
-            
-            routeLine = L.polyline(coordinates, {
-                color: '#e74c3c',
-                weight: 4,
-                opacity: 0.7,
-                dashArray: '10, 10',
-                lineJoin: 'round'
-            }).addTo(map);
-            
+            routeLine = L.polyline(coordinates, { color: '#e74c3c', weight: 4, opacity: 0.7, dashArray: '10, 10', lineJoin: 'round' }).addTo(map);
             map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
         }
         
         function addMarkers() {
             markers.forEach(m => map.removeLayer(m));
             markers = [];
-            
             currentItinerario.tappe.forEach((tappa, index) => {
                 const icon = momentIcons[tappa.momento_giornata] || '📍';
-                
                 const marker = L.marker(tappa.coordinate, {
-                    icon: L.divIcon({
-                        html: `<div style="font-size: 2em;">${icon}</div>`,
-                        className: 'custom-marker',
-                        iconSize: [40, 40]
-                    })
+                    icon: L.divIcon({ html: `<div style="font-size: 2em;">${icon}</div>`, className: 'custom-marker', iconSize: [40, 40] })
                 }).addTo(map);
-                
                 marker.bindPopup(`<b>Tappa ${tappa.numero}</b><br>${tappa.nome}`);
                 marker.on('click', () => loadTappa(index));
-                
                 markers.push(marker);
             });
         }
         
-        // ========================================
-        // TIMELINE
-        // ========================================
         function renderTimeline() {
             const container = document.getElementById('timeline-items');
             container.innerHTML = '';
-            
             currentItinerario.tappe.forEach((tappa, index) => {
                 const item = document.createElement('div');
-                item.className = 'timeline-item';
-                
-                if (index < currentTappaIndex) item.classList.add('completed');
-                else if (index === currentTappaIndex) item.classList.add('current');
-                else item.classList.add('upcoming');
-                
+                item.className = `timeline-item ${index < currentTappaIndex ? 'completed' : index === currentTappaIndex ? 'current' : 'upcoming'}`;
                 item.onclick = () => loadTappa(index);
-                
                 item.innerHTML = `
                     <div class="timeline-icon">${momentIcons[tappa.momento_giornata]}</div>
                     <div class="timeline-time">${tappa.orario_consigliato}</div>
                     <div class="timeline-name">${tappa.nome}</div>
                     <div class="timeline-duration">${tappa.durata_visita_min} min</div>
                 `;
-                
                 container.appendChild(item);
             });
-            
-            updateProgress();
-        }
-        
-        function updateProgress() {
-            const progress = ((currentTappaIndex + 1) / currentItinerario.tappe.length) * 100;
-            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('progress-fill').style.width = `${((currentTappaIndex + 1) / currentItinerario.tappe.length) * 100}%`;
         }
         
         // ========================================
-        // CARICA TAPPA
+        // CARICAMENTO TAPPA CORRENTE
         // ========================================
         function loadTappa(index) {
             currentTappaIndex = index;
             const tappa = currentItinerario.tappe[index];
             
-            // Header
             document.getElementById('tappa-numero').textContent = `${tappa.numero}`;
             document.querySelector('#tappa-nome h2').textContent = tappa.nome;
             document.querySelector('#tappa-nome .descrizione-breve').textContent = tappa.descrizione_breve || '';
             document.querySelector('#tappa-orario .time').textContent = tappa.orario_consigliato;
             document.querySelector('#tappa-orario .moment').textContent = tappa.momento_giornata;
             
-            // Content
             renderTappaContent(tappa);
-            
-            // Timeline
             renderTimeline();
-            
-            // Mappa: centra su tappa corrente
             map.setView(tappa.coordinate, 16, { animate: true });
             markers[index].openPopup();
             
-            // Buttons
             document.querySelector('.nav-btn.prev').disabled = index === 0;
             document.querySelector('.nav-btn.next').disabled = index === currentItinerario.tappe.length - 1;
+            
+            // Scorri automaticamente in cima ai dettagli
+            document.getElementById('tappa-details').scrollTop = 0;
         }
         
         function renderTappaContent(tappa) {
             const container = document.getElementById('tappa-content');
             container.innerHTML = '';
             
-            // Storia e Curiosità
-            if (tappa.storia || tappa.curiosita) {
+            // Storia
+            if (tappa.storia) {
                 const storiaSec = document.createElement('div');
                 storiaSec.className = 'esperienza-section';
-                storiaSec.innerHTML = `
-                    <h3>📜 Storia e Curiosità</h3>
-                    ${tappa.storia ? `<p><strong>Storia:</strong> ${tappa.storia}</p>` : ''}
-                    ${tappa.curiosita ? `<p><strong>Curiosità:</strong> ${tappa.curiosita}</p>` : ''}
-                `;
+                storiaSec.innerHTML = `<h3>📜 Storia e Curiosità</h3><p>${tappa.storia}</p>`;
                 container.appendChild(storiaSec);
             }
             
-            // Esperienza Culturale
             if (tappa.esperienza_culturale) {
                 const exp = tappa.esperienza_culturale;
                 
@@ -1135,13 +506,8 @@
                     musicDiv.className = 'music-player';
                     musicDiv.innerHTML = `
                         <h4>🎵 ${exp.musica.movimento || 'Brano Musicale'}</h4>
-                        <audio controls>
-                            <source src="${exp.musica.url_audio}" type="audio/mpeg">
-                            Il tuo browser non supporta l'audio.
-                        </audio>
-                        <div class="music-description">
-                            ${exp.musica.descrizione_musicale || ''}
-                        </div>
+                        <audio controls><source src="${exp.musica.url_audio}" type="audio/mpeg"></audio>
+                        <div class="music-description">${exp.musica.descrizione_musicale || ''}</div>
                     `;
                     container.appendChild(musicDiv);
                 }
@@ -1164,225 +530,161 @@
                     atmDiv.innerHTML = `
                         <h3>🌤️ Atmosfera del Luogo</h3>
                         <div class="atmosfera-grid">
-                            <div class="atmosfera-item">
-                                <div class="icon">💡</div>
-                                <div class="label">Luce</div>
-                                <div class="value">${exp.atmosfera.luce || 'N/A'}</div>
-                            </div>
-                            <div class="atmosfera-item">
-                                <div class="icon">🌡️</div>
-                                <div class="label">Temperatura</div>
-                                <div class="value">${exp.atmosfera.temperatura_stimata || 'N/A'}</div>
-                            </div>
-                            <div class="atmosfera-item">
-                                <div class="icon">👥</div>
-                                <div class="label">Affollamento</div>
-                                <div class="value">${exp.atmosfera.affollamento || 'N/A'}</div>
-                            </div>
-                            <div class="atmosfera-item">
-                                <div class="icon">😌</div>
-                                <div class="label">Emozione</div>
-                                <div class="value">${exp.atmosfera.emozione_target || 'N/A'}</div>
-                            </div>
+                            <div class="atmosfera-item"><div class="icon">💡</div><div class="label">Luce</div><div class="value">${exp.atmosfera.luce || '-'}</div></div>
+                            <div class="atmosfera-item"><div class="icon">🌡️</div><div class="label">Temp.</div><div class="value">${exp.atmosfera.temperatura_stimata || '-'}</div></div>
+                            <div class="atmosfera-item"><div class="icon">👥</div><div class="label">Affollamento</div><div class="value">${exp.atmosfera.affollamento || '-'}</div></div>
+                            <div class="atmosfera-item"><div class="icon">😌</div><div class="label">Emozione</div><div class="value">${exp.atmosfera.emozione_target || '-'}</div></div>
                         </div>
-                        ${exp.atmosfera.consiglio_fotografico ? `<p style="margin-top: 15px;"><strong>📸 Fotografia:</strong> ${exp.atmosfera.consiglio_fotografico}</p>` : ''}
                     `;
                     container.appendChild(atmDiv);
                 }
             }
-        }
-        
-        // ========================================
-        // NAVIGAZIONE TAPPE
-        // ========================================
-        function previousTappa() {
-            if (currentTappaIndex > 0) {
-                loadTappa(currentTappaIndex - 1);
-            }
-        }
-        
-        function nextTappa() {
-            if (currentTappaIndex < currentItinerario.tappe.length - 1) {
-                loadTappa(currentTappaIndex + 1);
-            }
-        }
-        
-        // ========================================
-        // AVVIO
-        // ========================================
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-    <div class="container mb-5">
-        <div id="byron-quiz-container" class="card p-4 shadow-sm" style="border: 1px solid var(--secondary-color); border-radius: 10px;">
-            <h3 class="text-center mb-4" style="color: var(--primary-color); font-family: var(--font-heading);">
-                🖋️ Mettiti alla prova: Quanto sei Byroniano?
-            </h3>
             
-            <div id="quiz-content">
-                <h5 id="question-text" class="mb-4" style="color: var(--text-color); font-family: var(--font-body); font-weight: bold;">
-                    Caricamento domanda...
-                </h5>
-                <div id="options-container" style="display: flex; flex-direction: column; gap: 10px;">
-                    </div>
-                <p id="feedback-text" class="mt-3 text-center" style="display: none; font-weight: bold; font-size: 1.1rem; padding: 10px; border-radius: 5px;"></p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Dati del Quiz
-        const quizData = [
-            {
-                question: "1. In quale anno Lord Byron arrivò a Roma, definendola 'Città dell'anima'?",
-                options: ["1815", "1817", "1821", "1824"],
-                correct: 1 // L'indice 1 corrisponde a "1817"
-            },
-            {
-                question: "2. Quale celebre luogo romano era il crocevia degli artisti romantici internazionali?",
-                options: ["Piazza Navona", "Castel Sant'Angelo", "Antico Caffè Greco", "Pantheon"],
-                correct: 2
-            },
-            {
-                question: "3. Davanti a quale monumento Byron provò un senso di malinconia e Sublime al crepuscolo?",
-                options: ["Il Colosseo", "La Fontana di Trevi", "Il Pantheon", "I Fori Imperiali"],
-                correct: 0
+            // ==========================================
+            // INIEZIONE NATIVA DEL QUIZ NELL'ULTIMA TAPPA
+            // ==========================================
+            if (currentTappaIndex === currentItinerario.tappe.length - 1) {
+                renderQuiz(container);
             }
-        ];
+        }
+        
+        // ========================================
+        // LOGICA DEL QUIZ (Generato Dinamicamente)
+        // ========================================
+        function renderQuiz(container) {
+            quizScore = 0;
+            quizCurrentQuestion = 0;
+            
+            const quizContainer = document.createElement('div');
+            quizContainer.className = 'esperienza-section';
+            quizContainer.style.borderLeft = '4px solid var(--accent-color)'; // Rosso per evidenziare il test finale
+            quizContainer.style.marginTop = '40px';
+            
+            quizContainer.innerHTML = `
+                <h3 style="color: var(--primary-color); justify-content: center; margin-bottom: 20px;">🖋️ Prova Finale: Quanto sei Byroniano?</h3>
+                <div id="quiz-content">
+                    <h4 id="quiz-question" style="margin-bottom: 15px; color: var(--text-main); font-family: var(--font-body); font-size: 1.1em; line-height: 1.5;"></h4>
+                    <div id="quiz-options" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                    <div id="quiz-feedback" style="display: none; margin-top: 15px; font-weight: bold; padding: 15px; border-radius: 5px; text-align: center;"></div>
+                </div>
+            `;
+            container.appendChild(quizContainer);
+            loadQuizQuestion();
+        }
 
-        let currentQuestion = 0;
-        let score = 0;
-
-        // Elementi del DOM
-        const questionEl = document.getElementById('question-text');
-        const optionsEl = document.getElementById('options-container');
-        const feedbackEl = document.getElementById('feedback-text');
-        const quizContent = document.getElementById('quiz-content');
-
-        function loadQuestion() {
+        function loadQuizQuestion() {
+            const questionEl = document.getElementById('quiz-question');
+            const optionsEl = document.getElementById('quiz-options');
+            const feedbackEl = document.getElementById('quiz-feedback');
+            
+            if (!questionEl) return;
+            
             feedbackEl.style.display = 'none';
-            const currentQuizData = quizData[currentQuestion];
-            questionEl.innerText = currentQuizData.question;
+            const currentQ = quizData[quizCurrentQuestion];
+            questionEl.innerText = currentQ.question;
             optionsEl.innerHTML = '';
-
-            currentQuizData.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.innerText = option;
+            
+            currentQ.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.innerText = opt;
                 
-                // Stile dei bottoni coerente con il design system
-                button.style.padding = "10px 20px";
-                button.style.textAlign = "left";
-                button.style.backgroundColor = "transparent";
-                button.style.color = "var(--text-color)";
-                button.style.border = "1px solid var(--secondary-color)";
-                button.style.borderRadius = "5px";
-                button.style.cursor = "pointer";
-                button.style.transition = "all 0.3s ease";
-                button.style.fontFamily = "var(--font-body)";
-                button.style.fontWeight = "500";
-
-                // Effetto Hover
-                button.addEventListener('mouseover', () => {
-                    button.style.backgroundColor = "var(--secondary-color)";
-                    button.style.color = "#fff";
-                });
-                button.addEventListener('mouseout', () => {
-                    button.style.backgroundColor = "transparent";
-                    button.style.color = "var(--text-color)";
-                });
-
-                button.addEventListener('click', () => selectAnswer(index, button));
-                optionsEl.appendChild(button);
+                // Stili del bottone
+                btn.style.padding = "12px 20px";
+                btn.style.textAlign = "left";
+                btn.style.backgroundColor = "transparent";
+                btn.style.color = "var(--text-main)";
+                btn.style.border = "1px solid var(--secondary-color)";
+                btn.style.borderRadius = "5px";
+                btn.style.cursor = "pointer";
+                btn.style.transition = "all 0.2s ease";
+                btn.style.fontFamily = "var(--font-body)";
+                btn.style.fontSize = "1em";
+                
+                // Hover Effects
+                btn.onmouseover = () => { btn.style.backgroundColor = "var(--secondary-color)"; btn.style.color = "#fff"; };
+                btn.onmouseout = () => { btn.style.backgroundColor = "transparent"; btn.style.color = "var(--text-main)"; };
+                
+                btn.onclick = () => selectQuizAnswer(index, btn);
+                optionsEl.appendChild(btn);
             });
         }
 
-        function selectAnswer(selectedIndex, selectedButton) {
-            const currentQuizData = quizData[currentQuestion];
-            const buttons = optionsEl.querySelectorAll('button');
-
-            // Disabilita i bottoni dopo la scelta
+        function selectQuizAnswer(selectedIndex, selectedButton) {
+            const currentQ = quizData[quizCurrentQuestion];
+            const buttons = document.getElementById('quiz-options').querySelectorAll('button');
+            const feedbackEl = document.getElementById('quiz-feedback');
+            
+            // Disabilita bottoni
             buttons.forEach(btn => {
                 btn.disabled = true;
                 btn.style.cursor = "not-allowed";
+                btn.onmouseover = null;
+                btn.onmouseout = null;
             });
-
-            // Logica di vittoria/sconfitta
-            if (selectedIndex === currentQuizData.correct) {
-                score++;
-                feedbackEl.innerText = "✨ Esatto! Ottima memoria.";
-                feedbackEl.style.backgroundColor = "#d4edda";
-                feedbackEl.style.color = "#155724";
+            
+            // Controllo Risposta
+            if (selectedIndex === currentQ.correct) {
+                quizScore++;
+                feedbackEl.innerText = "✨ Esatto! Eccellente deduzione.";
+                feedbackEl.style.backgroundColor = "rgba(40, 167, 69, 0.2)";
+                feedbackEl.style.color = "#28a745";
+                feedbackEl.style.border = "1px solid #28a745";
+                
                 selectedButton.style.backgroundColor = "#28a745";
                 selectedButton.style.color = "#fff";
+                selectedButton.style.borderColor = "#28a745";
             } else {
-                feedbackEl.innerText = "❌ Sbagliato! La risposta corretta era: " + currentQuizData.options[currentQuizData.correct];
-                feedbackEl.style.backgroundColor = "#f8d7da";
-                feedbackEl.style.color = "#721c24";
+                feedbackEl.innerText = "❌ Errato! La risposta corretta era: " + currentQ.options[currentQ.correct];
+                feedbackEl.style.backgroundColor = "rgba(220, 53, 69, 0.2)";
+                feedbackEl.style.color = "#dc3545";
+                feedbackEl.style.border = "1px solid #dc3545";
+                
                 selectedButton.style.backgroundColor = "#dc3545";
                 selectedButton.style.color = "#fff";
-                buttons[currentQuizData.correct].style.backgroundColor = "#28a745";
-                buttons[currentQuizData.correct].style.color = "#fff";
+                selectedButton.style.borderColor = "#dc3545";
+                
+                // Evidenzia quella giusta
+                buttons[currentQ.correct].style.backgroundColor = "#28a745";
+                buttons[currentQ.correct].style.color = "#fff";
+                buttons[currentQ.correct].style.borderColor = "#28a745";
             }
-
+            
             feedbackEl.style.display = 'block';
-            currentQuestion++;
-
-            // Passa alla prossima domanda o ai risultati
-            if (currentQuestion < quizData.length) {
-                setTimeout(loadQuestion, 2500); // Attende 2.5 secondi
+            quizCurrentQuestion++;
+            
+            // Avanzamento
+            if (quizCurrentQuestion < quizData.length) {
+                setTimeout(loadQuizQuestion, 2500);
             } else {
-                setTimeout(showResults, 2500);
+                setTimeout(showQuizResults, 2500);
             }
         }
 
-        function showResults() {
+        function showQuizResults() {
+            const content = document.getElementById('quiz-content');
+            if (!content) return;
+            
             let message = "";
-            if (score === 3) message = "Sei un vero poeta romantico! Il Sublime è con te.";
-            else if (score === 2) message = "Buon lavoro! Ma c'è ancora qualche lacuna byroniana.";
-            else message = "Lord Byron ti invita a rileggere i suoi diari!";
-
-            quizContent.innerHTML = `
-                <h4 class="text-center" style="color: var(--primary-color); font-family: var(--font-heading);">Pellegrinaggio Completato!</h4>
-                <p class="text-center mt-3 mb-1" style="color: var(--text-color); font-size: 1.2rem;">Il tuo punteggio finale: <strong>${score} / ${quizData.length}</strong></p>
-                <p class="text-center mb-4" style="color: var(--text-color);">${message}</p>
-                <button onclick="location.reload()" style="width: 100%; padding: 12px; background-color: var(--primary-color); color: #f4f1ea; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-family: var(--font-body);">
-                    Riprova il Viaggio
-                </button>
+            if (quizScore === 3) message = "Sei un vero poeta romantico! Il Sublime è con te.";
+            else if (quizScore === 2) message = "Pellegrinaggio lodevole! Ti manca solo un pizzico di malinconia in più.";
+            else message = "Lord Byron ti invita a rileggere i suoi diari davanti a una tazza di tè.";
+            
+            content.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h4 style="color: var(--primary-color); font-family: var(--font-heading); font-size: 1.5em; margin-bottom: 15px;">Pellegrinaggio Completato!</h4>
+                    <div style="font-size: 3em; margin-bottom: 10px;">${quizScore === 3 ? '🏆' : quizScore === 2 ? '📜' : '🕯️'}</div>
+                    <p style="margin-bottom: 15px; font-size: 1.2em;">Il tuo punteggio finale: <strong>${quizScore} / ${quizData.length}</strong></p>
+                    <p style="color: var(--text-muted); font-style: italic; margin-bottom: 25px;">${message}</p>
+                    <button onclick="startItinerario(currentItinerario.id)" class="card-button" style="width: auto; padding: 10px 30px;">Ricomincia l'Itinerario</button>
+                </div>
             `;
         }
 
-        // Avvia il quiz
-        loadQuestion();
-        // ==========================================
-        // TELETRASPORTO STRATEGICO DOPO LA MUSICA
-        // ==========================================
-        const spostaQuiz = setInterval(() => {
-            // Cerchiamo i blocchi musicali generati dal prof
-            const blocchiMusica = document.querySelectorAll('.music-player');
-            const quizContainerBox = document.getElementById('byron-quiz-container');
-            const contenitoreEsterno = quizContainerBox.parentElement;
-
-            // Appena lo script del prof ha finito di creare i blocchi musicali...
-            if (blocchiMusica.length > 0) {
-                // 1. Prendi l'ultimo blocco musicale (quello dell'ultima tappa)
-                const ultimaMusica = blocchiMusica[blocchiMusica.length - 1];
-                
-                // 2. Inietta il quiz esattamente DOPO la musica, dentro la stessa tappa!
-                ultimaMusica.after(contenitoreEsterno);
-                
-                // 3. Pulizia estetica per farlo sembrare un blocco nativo del prof
-                quizContainerBox.style.border = "none";
-                quizContainerBox.style.boxShadow = "none";
-                quizContainerBox.style.borderTop = "1px dashed var(--secondary-color)"; // Linea separatrice elegante
-                quizContainerBox.style.marginTop = "2rem";
-                quizContainerBox.style.padding = "2rem 0 0 0";
-                quizContainerBox.style.borderRadius = "0";
-                
-                // Blocco trovato e spostato, interrompiamo il timer
-                clearInterval(spostaQuiz); 
-            }
-        }, 500); // Controlla ogni mezzo secondo
-            }
-        }, 500); // Controlla ogni mezzo secondo
+        // Navigazione
+        function previousTappa() { if (currentTappaIndex > 0) loadTappa(currentTappaIndex - 1); }
+        function nextTappa() { if (currentTappaIndex < currentItinerario.tappe.length - 1) loadTappa(currentTappaIndex + 1); }
+        
+        window.addEventListener('DOMContentLoaded', init);
     </script>
+</body>
 </html>
