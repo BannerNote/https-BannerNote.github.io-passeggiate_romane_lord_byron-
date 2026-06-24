@@ -1213,4 +1213,145 @@
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
+    <div class="container mb-5">
+        <div id="byron-quiz-container" class="card p-4 shadow-sm" style="border: 1px solid var(--secondary-color); border-radius: 10px;">
+            <h3 class="text-center mb-4" style="color: var(--primary-color); font-family: var(--font-heading);">
+                🖋️ Mettiti alla prova: Quanto sei Byroniano?
+            </h3>
+            
+            <div id="quiz-content">
+                <h5 id="question-text" class="mb-4" style="color: var(--text-color); font-family: var(--font-body); font-weight: bold;">
+                    Caricamento domanda...
+                </h5>
+                <div id="options-container" style="display: flex; flex-direction: column; gap: 10px;">
+                    </div>
+                <p id="feedback-text" class="mt-3 text-center" style="display: none; font-weight: bold; font-size: 1.1rem; padding: 10px; border-radius: 5px;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dati del Quiz
+        const quizData = [
+            {
+                question: "1. In quale anno Lord Byron arrivò a Roma, definendola 'Città dell'anima'?",
+                options: ["1815", "1817", "1821", "1824"],
+                correct: 1 // L'indice 1 corrisponde a "1817"
+            },
+            {
+                question: "2. Quale celebre luogo romano era il crocevia degli artisti romantici internazionali?",
+                options: ["Piazza Navona", "Castel Sant'Angelo", "Antico Caffè Greco", "Pantheon"],
+                correct: 2
+            },
+            {
+                question: "3. Davanti a quale monumento Byron provò un senso di malinconia e Sublime al crepuscolo?",
+                options: ["Il Colosseo", "La Fontana di Trevi", "Il Pantheon", "I Fori Imperiali"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        // Elementi del DOM
+        const questionEl = document.getElementById('question-text');
+        const optionsEl = document.getElementById('options-container');
+        const feedbackEl = document.getElementById('feedback-text');
+        const quizContent = document.getElementById('quiz-content');
+
+        function loadQuestion() {
+            feedbackEl.style.display = 'none';
+            const currentQuizData = quizData[currentQuestion];
+            questionEl.innerText = currentQuizData.question;
+            optionsEl.innerHTML = '';
+
+            currentQuizData.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                
+                // Stile dei bottoni coerente con il design system
+                button.style.padding = "10px 20px";
+                button.style.textAlign = "left";
+                button.style.backgroundColor = "transparent";
+                button.style.color = "var(--text-color)";
+                button.style.border = "1px solid var(--secondary-color)";
+                button.style.borderRadius = "5px";
+                button.style.cursor = "pointer";
+                button.style.transition = "all 0.3s ease";
+                button.style.fontFamily = "var(--font-body)";
+                button.style.fontWeight = "500";
+
+                // Effetto Hover
+                button.addEventListener('mouseover', () => {
+                    button.style.backgroundColor = "var(--secondary-color)";
+                    button.style.color = "#fff";
+                });
+                button.addEventListener('mouseout', () => {
+                    button.style.backgroundColor = "transparent";
+                    button.style.color = "var(--text-color)";
+                });
+
+                button.addEventListener('click', () => selectAnswer(index, button));
+                optionsEl.appendChild(button);
+            });
+        }
+
+        function selectAnswer(selectedIndex, selectedButton) {
+            const currentQuizData = quizData[currentQuestion];
+            const buttons = optionsEl.querySelectorAll('button');
+
+            // Disabilita i bottoni dopo la scelta
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = "not-allowed";
+            });
+
+            // Logica di vittoria/sconfitta
+            if (selectedIndex === currentQuizData.correct) {
+                score++;
+                feedbackEl.innerText = "✨ Esatto! Ottima memoria.";
+                feedbackEl.style.backgroundColor = "#d4edda";
+                feedbackEl.style.color = "#155724";
+                selectedButton.style.backgroundColor = "#28a745";
+                selectedButton.style.color = "#fff";
+            } else {
+                feedbackEl.innerText = "❌ Sbagliato! La risposta corretta era: " + currentQuizData.options[currentQuizData.correct];
+                feedbackEl.style.backgroundColor = "#f8d7da";
+                feedbackEl.style.color = "#721c24";
+                selectedButton.style.backgroundColor = "#dc3545";
+                selectedButton.style.color = "#fff";
+                buttons[currentQuizData.correct].style.backgroundColor = "#28a745";
+                buttons[currentQuizData.correct].style.color = "#fff";
+            }
+
+            feedbackEl.style.display = 'block';
+            currentQuestion++;
+
+            // Passa alla prossima domanda o ai risultati
+            if (currentQuestion < quizData.length) {
+                setTimeout(loadQuestion, 2500); // Attende 2.5 secondi
+            } else {
+                setTimeout(showResults, 2500);
+            }
+        }
+
+        function showResults() {
+            let message = "";
+            if (score === 3) message = "Sei un vero poeta romantico! Il Sublime è con te.";
+            else if (score === 2) message = "Buon lavoro! Ma c'è ancora qualche lacuna byroniana.";
+            else message = "Lord Byron ti invita a rileggere i suoi diari!";
+
+            quizContent.innerHTML = `
+                <h4 class="text-center" style="color: var(--primary-color); font-family: var(--font-heading);">Pellegrinaggio Completato!</h4>
+                <p class="text-center mt-3 mb-1" style="color: var(--text-color); font-size: 1.2rem;">Il tuo punteggio finale: <strong>${score} / ${quizData.length}</strong></p>
+                <p class="text-center mb-4" style="color: var(--text-color);">${message}</p>
+                <button onclick="location.reload()" style="width: 100%; padding: 12px; background-color: var(--primary-color); color: #f4f1ea; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-family: var(--font-body);">
+                    Riprova il Viaggio
+                </button>
+            `;
+        }
+
+        // Avvia il quiz
+        loadQuestion();
+    </script>
 </html>
