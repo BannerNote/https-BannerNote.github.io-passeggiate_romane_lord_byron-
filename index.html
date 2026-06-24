@@ -1354,21 +1354,32 @@
         // Avvia il quiz
         loadQuestion();
         // ==========================================
-        // TELETRASPORTO DEL QUIZ TRA LE TAPPE
+        // TELETRASPORTO DEL QUIZ NELL'ULTIMA TAPPA
         // ==========================================
         const spostaQuiz = setInterval(() => {
-            // Cerchiamo le card generate dallo script del professore
+            // Cerchiamo tutte le card generate
             const tappe = document.querySelectorAll('.card, .tappa');
-            const contenitoreQuiz = document.getElementById('byron-quiz-container').parentElement;
+            const quizContainerBox = document.getElementById('byron-quiz-container');
+            const contenitoreEsterno = quizContainerBox.parentElement;
 
-            // Se il sistema ha finito di caricare almeno 2 tappe...
-            if (tappe.length >= 2) {
-                // ...prendi il quiz e inseriscilo esattamente DOPO la seconda tappa
-                tappe[1].after(contenitoreQuiz);
+            // Se il sistema ha caricato le tappe...
+            if (tappe.length > 0) {
+                // 1. Prendi l'ultima tappa (Il Colosseo)
+                const ultimaTappa = tappe[tappe.length - 1];
                 
-                // Aggiungiamo un po' di spazio per non farlo appiccicare alle altre card
-                contenitoreQuiz.style.marginTop = "2rem";
-                contenitoreQuiz.style.marginBottom = "2rem";
+                // 2. Trova l'interno della card
+                const corpoCard = ultimaTappa.querySelector('.card-body') || ultimaTappa;
+
+                // 3. Sposta il quiz dentro l'ultima card, in fondo
+                corpoCard.appendChild(contenitoreEsterno);
+                
+                // 4. Modifiche estetiche per farlo fondere con la card del Colosseo
+                quizContainerBox.style.border = "none"; // Toglie il bordo a scatola
+                quizContainerBox.style.boxShadow = "none"; // Toglie l'ombra interna
+                quizContainerBox.style.borderTop = "1px dashed var(--secondary-color)"; // Aggiunge linea di separazione
+                quizContainerBox.style.marginTop = "2rem";
+                quizContainerBox.style.padding = "2rem 0 0 0"; // Toglie i margini laterali
+                quizContainerBox.style.borderRadius = "0";
                 
                 // Missione compiuta, ferma il controllo
                 clearInterval(spostaQuiz); 
