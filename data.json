@@ -89,8 +89,12 @@
           },
           "esperienza_culturale": {
             "letteratura": {
-              "citazione": "I grandi poeti e gli artisti siedono in queste stanze fumose, dove l'arte non ha nazione.",
-              "contesto": "Il fermento intellettuale dei ritrovi bohémien dell'Ottocento."
+              "citazione": "Oh Roma! Mia patria! Città dell'anima!",
+              "autore": "Lord Byron",
+              "opera": "Il pellegrinaggio del giovane Harold (Canto IV, Strofa 78)",
+              "anno": 1818,
+              "contesto": "Un'esclamazione di amore assoluto in cui il poeta elegge la Città Eterna a sua unica vera patria spirituale e letteraria."
+  },
             },
             "atmosfera": {
               "momento": "pomeriggio",
