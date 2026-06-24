@@ -537,7 +537,13 @@
     font-family: var(--font-heading) !important;
     color: var(--primary-color) !important;
   }
-
+/* Forzatura colore scuro e leggibilità per tutti i testi e descrizioni */
+  p, span, .card-text, .descrizione, li {
+    color: var(--text-color) !important;
+    opacity: 1 !important; /* Rimuove eventuali trasparenze del template originale */
+    font-weight: 500 !important; /* Rende il carattere appena più corposo */
+    line-height: 1.6 !important; /* Aumenta lo spazio tra le righe per far respirare il testo */
+  }
   /* 3. Dark Mode Automatica */
   @media (prefers-color-scheme: dark) {
     :root {
