@@ -42,10 +42,11 @@
           "indicazioni_arrivo": "Metro A, fermata Spagna. Posizionarsi ai piedi della scalinata di Trinità dei Monti.",
           "esperienza_culturale": {
             "letteratura": {
-              "citazione": "Sono innamorato di Roma... è la città dell'anima.",
-              "opera": "Lettere a Thomas Moore",
+              "citazione": "Ma quando sorge la luna, e la luce / Porge a queste mura una magia gentile... / Lasciando quel che in rovina è più bello.",
+              "autore": "Lord Byron",
+              "opera": "Manfred (Atto III, Scena 4)",
               "anno": 1817,
-              "contesto": "Byron esprime il suo primo impatto folgorante con la città appena giunto nel suo appartamento al civico 66."
+              "contesto": "Il protagonista Manfred ricorda la sua visita solitaria e mistica al Colosseo."
             },
             "atmosfera": {
               "momento": "mattino",
@@ -130,11 +131,11 @@
           },
           "esperienza_culturale": {
             "letteratura": {
-              "citazione": "Oh Roma! Patria mia! Città dell'anima! / Gli orfani del cuore si volgano a te, / Genitrice di imperi defunti...",
+              "citazione": "Gli orfani del cuore devono volgersi a te, madre solitaria di imperi morti.",
               "autore": "Lord Byron",
-              "opera": "Childe Harold's Pilgrimage (Canto IV, Stanza 78)",
+              "opera": "Il pellegrinaggio del giovane Harold (Canto IV, Strofa 78)",
               "anno": 1818,
-              "contesto": "La meditazione sulla caducità della grandezza umana davanti alle rovine."
+              "contesto": "Roma viene vista come il rifugio supremo per chi ha l'anima tormentata, un luogo che ridimensiona i dolori personali di fronte alla vastità della sua storia e delle sue rovine."
             },
             "atmosfera": {
               "momento": "sera",
@@ -181,11 +182,11 @@
               "url_audio": "https://dn721601.ca.archive.org/0/items/BeethovenSymphonyNo.7_807/02_Beethoven_Sym_No.7_m2.mp3" 
           },
             "letteratura": {
-              "citazione": "Ma quando sorge la luna, e la luce / Porge a queste mura una magia gentile... / Lasciando quel che in rovina è più bello.",
+              "citazione": "Finché starà il Colosseo, starà Roma; quando cadrà il Colosseo, cadrà Roma; e quando cadrà Roma, cadrà il mondo.",
               "autore": "Lord Byron",
-              "opera": "Manfred (Atto III, Scena 4)",
-              "anno": 1817,
-              "contesto": "Il protagonista Manfred ricorda la sua visita solitaria e mistica al Colosseo."
+              "opera": "Il pellegrinaggio del giovane Harold (Canto IV, Strofa 145)",
+              "anno": 1818,
+              "contesto": "Il poeta rende immortale, riportandola in voga in epoca romantica, un'antica profezia dell'VIII secolo originariamente attribuita al monaco Beda il Venerabile."
             },
             "atmosfera": {
               "momento": "crepuscolo",
