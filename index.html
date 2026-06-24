@@ -1353,5 +1353,26 @@
 
         // Avvia il quiz
         loadQuestion();
+        // ==========================================
+        // TELETRASPORTO DEL QUIZ TRA LE TAPPE
+        // ==========================================
+        const spostaQuiz = setInterval(() => {
+            // Cerchiamo le card generate dallo script del professore
+            const tappe = document.querySelectorAll('.card, .tappa');
+            const contenitoreQuiz = document.getElementById('byron-quiz-container').parentElement;
+
+            // Se il sistema ha finito di caricare almeno 2 tappe...
+            if (tappe.length >= 2) {
+                // ...prendi il quiz e inseriscilo esattamente DOPO la seconda tappa
+                tappe[1].after(contenitoreQuiz);
+                
+                // Aggiungiamo un po' di spazio per non farlo appiccicare alle altre card
+                contenitoreQuiz.style.marginTop = "2rem";
+                contenitoreQuiz.style.marginBottom = "2rem";
+                
+                // Missione compiuta, ferma il controllo
+                clearInterval(spostaQuiz); 
+            }
+        }, 500); // Controlla ogni mezzo secondo
     </script>
 </html>
