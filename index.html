@@ -511,44 +511,51 @@
     </style>
 <style>
   /* --- DESIGN SYSTEM CREPUSCOLO BYRONIANO --- */
-  
-  /* 1. Importazione Font di Google */
   @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
 
-  /* 2. Definizione Colori e Font */
   :root {
     --primary-color: #2c1b3d;
     --secondary-color: #b08d57;
     --bg-color: #f4f1ea;
-    --text-color: #111111; /* Nero profondo per massimo contrasto */
+    --text-color: #111111;
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Lora', serif;
     --shadow-soft: 0 4px 15px rgba(44, 27, 61, 0.1);
   }
 
-  body {
-    font-family: var(--font-body) !important;
+  /* Dark Mode */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-color: #1a1525; /* Sfondo scuro notturno */
+      --text-color: #e0dcd3; /* Testo chiaro leggibile */
+      --primary-color: #d1b3ff; /* Lilla per i titoli */
+      --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  /* Applicazione Sfondo e Testo (Ora include anche le CARD del prof) */
+  body, .card, .card-body, .list-group-item, .bg-light, .bg-white {
     background-color: var(--bg-color) !important;
     color: var(--text-color) !important;
+    font-family: var(--font-body) !important;
     transition: all 0.4s ease;
   }
 
   h1, h2, h3, h4, h5, h6, .titolo-tappa, .card-title {
     font-family: var(--font-heading) !important;
     color: var(--primary-color) !important;
+    -webkit-text-fill-color: var(--primary-color) !important;
   }
 
-  /* 3. Dark Mode Automatica */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg-color: #1a1525;
-      --text-color: #e0dcd3;
-      --primary-color: #d1b3ff;
-      --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }
+  /* Forzatura testo paragrafi */
+  p, span, li, a, .text-muted, .text-secondary, .card-text {
+      color: var(--text-color) !important;
+      opacity: 1 !important;
+      -webkit-text-fill-color: var(--text-color) !important;
+      font-weight: 500 !important;
   }
 
-  /* 4. Animazioni Keyframes (1.8s per maggiore visibilità) */
+  /* Animazioni Keyframes (1.8s) */
   @keyframes fadeInTwilight {
     0% { opacity: 0; transform: translateY(40px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -558,27 +565,10 @@
     animation: fadeInTwilight 1.8s ease-out forwards;
   }
 
-  .tappa:hover, .card:hover {
+  .card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-soft);
     border-left: 4px solid var(--secondary-color);
-    transition: all 0.3s ease;
-  }
-
-  /* 5. Forzatura assoluta per testi leggibili contro il template originale */
-  p, 
-  span, 
-  li, 
-  .text-muted, 
-  .text-secondary, 
-  .card-body p, 
-  .card-text,
-  section p,
-  div[style*="opacity"] {
-      color: var(--text-color) !important;
-      opacity: 1 !important;
-      -webkit-text-fill-color: var(--text-color) !important;
-      font-weight: 500 !important;
   }
 </style>
 </head>
