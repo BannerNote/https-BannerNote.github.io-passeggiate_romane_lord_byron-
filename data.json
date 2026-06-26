@@ -10,7 +10,7 @@
         "professione": "Poeta",
         "nazionalita": "Britannica",
         "biografia_breve": "Figura iconica del Romanticismo europeo. Aristocratico, ribelle e in esilio volontario, soggiornò a Roma nella primavera del 1817. L'impatto con le rovine romane lo ispirò a completare il suo capolavoro, consacrando Roma come 'Città dell'anima' e simbolo del sentimento malinconico.",
-        "immagine": "assets/personaggi/byron.jpg",
+        "immagine": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Byron_1813_by_Phillips.jpg/500px-Byron_1813_by_Phillips.jpg",
         "opere_correlate": [
           "Childe Harold's Pilgrimage (Canto IV)",
           "Manfred",
